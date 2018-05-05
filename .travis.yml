@@ -18,7 +18,7 @@ before_deploy:
 - git checkout $TRAVIS_BRANCH
 - git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
 - cargo login $CRATES_TOKEN
-- cargo release --no-dev-version --no-confirm patch
+- cargo release --no-dev-version --no-confirm --tag-prefix v patch
 
 deploy:
 - provider: releases
