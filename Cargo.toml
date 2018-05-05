@@ -4,3 +4,7 @@ version = "0.1.0"
 authors = ["Cyryl Płotnicki <cyplo@cyplo.net>"]
 
 [dependencies]
+rand = "0.4.2"
+
+[dev-dependencies]
+quickcheck = "0.6.2"
