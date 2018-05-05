@@ -4,6 +4,7 @@ rust:
 - stable
 script:
 - cargo test
+- cargo package
 
 addons:
   apt:
