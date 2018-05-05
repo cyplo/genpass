@@ -4,7 +4,7 @@ rust:
   - stable
 
 install:
-  - cargo install cargo-release
+  - cargo install cargo-release --force
 
 script:
   - cargo test
