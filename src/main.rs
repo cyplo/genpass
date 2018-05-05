@@ -3,8 +3,8 @@
 extern crate quickcheck;
 
 extern crate rand;
-use rand::os::OsRng;
 use rand::Rng;
+use rand::os::OsRng;
 
 fn main() {
     println!("{}", generate_password(32));
