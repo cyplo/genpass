@@ -1,8 +1,8 @@
-# genpasswd [![Build Status](https://travis-ci.org/cyplo/genpasswd.svg?branch=master)](https://travis-ci.org/cyplo/genpasswd)
+# genpass [![Build Status](https://travis-ci.org/cyplo/genpass.svg?branch=master)](https://travis-ci.org/cyplo/genpass)
 
 A simple yet robust commandline random password generator.
 
 ```
-cargo install genpasswd
-genpasswd
+cargo install genpass
+genpass
 ```
