@@ -29,7 +29,8 @@ deploy:
     repo: cyplo/genpass
     branch: master
     condition: "$TRAVIS_RUST_VERSION = stable"
-    tags: false
+    condition: "-z $TRAVIS_TAG"
+    condition: "`git log -n 1 --pretty='%an'` =~ 'Travis'"
 
   skip_cleanup: true
 
