@@ -1,46 +1,49 @@
 sudo: required
 language: rust
 rust:
-  - stable
+- stable
 
 install:
-  - ./ci/install-publish-dependencies.sh
+- "./ci/install-publish-dependencies.sh"
 
 script:
-  - cargo test
-  - "./ci/upload-coverage-data.sh"
-  - cargo doc
-  - cargo package
+- cargo test
+- "./ci/upload-coverage-data.sh"
+- cargo doc
+- cargo package
 
 cache: cargo
 
 before_deploy:
-  - git checkout $TRAVIS_BRANCH
-  - cargo login $CRATES_TOKEN
-  - cargo release --no-dev-version --no-confirm patch
+- git checkout $TRAVIS_BRANCH
+- git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
+- cargo login $CRATES_TOKEN
+- cargo release --no-dev-version --no-confirm patch
 
 deploy:
-  - provider: releases
-    api_key:
-      secure: FIeSnm0af8vSz66m2PQoADByE71Aw18sUmYlWxYUbV/qGbstHvIqMtcXcy+NMLT/Z9Y1nU9HZVbSdJtK8L5YX3lnLxy45NDs9SvzOzLCN+z3qhI3RXlXJhq7evO+ucyLEVRk4mbgP5MQDF1x/lxHPvKkQsOcD0FlPVJWzaFh0u8bYaBqY6hpQksuZJxbraUw4mNVK9MMPh7YFS6PGBJAOBK5cveS7X/s6yR37mzSsMs7Jsx8SnaGwNgMEE5lbCSv1rUq4ZBaBaqNGuk0NBbXzZeaPdK49ozkjmI12A2MfXZUvhYmtBWqi8pE0X5MxLm2xUpnHcPTG3X6Cv3wLmLqFXEZQDHjIO61+1mp92UmSNNe+cmagT80T4lB1W06Azrv9O8lsgyiIbU9WUd7rIarnyN2xw1QxOEUXVCKxWTcANdn5HRwSV7oEzGK0GbfQg6Yd/9hdGAojNmsVw6ECmwPTDluEJpHYPjsRuXRHMwqlRI3LD3SPfvZqNd3MBRdG54JyQjymROdNMWfCTLOG9sfG0SfUwbOdWs25id5VIADAMRk8n5TGcNH5B70+kPkvrWFFCnZjk/sQx3AJXJLzyAJ1WBBe3TYGu0JGWwHdkcoaLAnDqcg5Z+5v3B5b8Xsgl2MB7Ri150uL/ihlIB6uMFt42LeDWE1nht5t+enQ5M44vQ=
-    file: target/package/genpass-$TRAVIS_TAG.crate
-    on:
-      repo: cyplo/genpass
-      branch: master
-      condition: "$TRAVIS_RUST_VERSION = stable"
-    skip_cleanup: true
+- provider: releases
+  api_key:
+    secure: FIeSnm0af8vSz66m2PQoADByE71Aw18sUmYlWxYUbV/qGbstHvIqMtcXcy+NMLT/Z9Y1nU9HZVbSdJtK8L5YX3lnLxy45NDs9SvzOzLCN+z3qhI3RXlXJhq7evO+ucyLEVRk4mbgP5MQDF1x/lxHPvKkQsOcD0FlPVJWzaFh0u8bYaBqY6hpQksuZJxbraUw4mNVK9MMPh7YFS6PGBJAOBK5cveS7X/s6yR37mzSsMs7Jsx8SnaGwNgMEE5lbCSv1rUq4ZBaBaqNGuk0NBbXzZeaPdK49ozkjmI12A2MfXZUvhYmtBWqi8pE0X5MxLm2xUpnHcPTG3X6Cv3wLmLqFXEZQDHjIO61+1mp92UmSNNe+cmagT80T4lB1W06Azrv9O8lsgyiIbU9WUd7rIarnyN2xw1QxOEUXVCKxWTcANdn5HRwSV7oEzGK0GbfQg6Yd/9hdGAojNmsVw6ECmwPTDluEJpHYPjsRuXRHMwqlRI3LD3SPfvZqNd3MBRdG54JyQjymROdNMWfCTLOG9sfG0SfUwbOdWs25id5VIADAMRk8n5TGcNH5B70+kPkvrWFFCnZjk/sQx3AJXJLzyAJ1WBBe3TYGu0JGWwHdkcoaLAnDqcg5Z+5v3B5b8Xsgl2MB7Ri150uL/ihlIB6uMFt42LeDWE1nht5t+enQ5M44vQ=
+  file: target/package/genpass-$TRAVIS_TAG.crate
+  on:
+    repo: cyplo/genpass
+    branch: master
+    condition: "$TRAVIS_RUST_VERSION = stable"
+  skip_cleanup: true
 
 addons:
   apt:
     packages:
-      - libcurl4-openssl-dev
-      - libelf-dev
-      - libdw-dev
-      - cmake
-      - gcc
-      - binutils-dev
-      - libiberty-dev
+    - libcurl4-openssl-dev
+    - libelf-dev
+    - libdw-dev
+    - cmake
+    - gcc
+    - binutils-dev
+    - libiberty-dev
+
 env:
   global:
-    - secure: kxDccRW5WlPTzwAGwwcvwDScZu2DaZZhPVzwv4gUtBuZfbCtmCAY5vccSVwp8azobrgVg4qjplbJbW7Dur6qHRtjHNTGGkaQK73hma+n+JNElTYgsOLNCVFUzADavgLt7E0XkUAuzr1lwhAmDK1sSzwVrx/2m4C2CpLiVN7I0ks+9UMB4FkFvaUVwqWskgJQX2q7wijgJnSJp9tMaoOXl/53VzZcBreFxgRqVyl6eEMVI3c5ZZKs0ttzwOxEJBJVPvisBQnIWbshqDxNWQVpRx4YxcImRy1MB81TpasqkfuAtgOGN336h5vTfwRPcyOUwxvhtoatTo3+ICN7nnb72oVmlBJofAxvXkljAtpSBLPGxyz0rZI/iLjywRMipnuBAJWpoeF9OsbXJsIoHfL5iAyKBo0IrRb0K6ObZAU8AlQn4XF1FoTrTmI9ZygGyTSZsvZPBUExIiMd0ylbYbU0nktud+rXX5rL4nWh0c4h1q9Qsn4n8xBMzdeKpjZMpYdvtKmo8caf1Kgk0qDhZKkGWRmGY2AJ8LA0sEdkk1Sn5llZmErS2hIOGaygGJxJbIjVRehlp5mC9eSbypcSacFzotA3skeTUwdBIqt2ALHbq6bvFzbpLFQJyQOkDyPDQckn6F46DLPrfsTjUhRytLvfiJ4pcqxzkDKoZhZlSyyaNKU=
-    - secure: n9vZ1S9bZmnwjvO0Mz/OX2dOoKQnd1GnlgtmCVONHmxqzRAKij+lG1RXd4h7gbaXKhP7I5iACT6epaOp9d3Of5bQGe+Tj4YMaob87Zrgwkfa6vKt2B6OJKuHG8XjnYDgpvgrlTNkOpX5m4Mf9PLUew2QbfVtgd+WKeSfXTpl2hSHf3lBYARbwIniCDPW6Iws722p63/fe88ViNGA3aT1ODgY+AQv/m01fMwxj2oia+jLo9nnwCl4yvQBP2yNSlF1aqKiSTy2wI/IAUllHWqvvdjR544ML2uGiHNpo2iDuf5vpF+oU58GHGtUn3sMGYR457qMj6xf/oMEmt9YOx3zRzrEd8M6n/jYUzic16qp41wmFWoDGDGYq4zGBl833R024Xrr4QqjxFCidycVPESBP/Kwx54JvGQJ7DtzHezkOPpmyA/mcC4RrK9f4aRybE9bfFxQwlFU5UHboaX6CSwGC85TWC5hhbY88SB11l0iFVY9XAL/PrS80SXFK6sTpb4gSEE+MVeziACQJNDaGis1KGjot/GmOGGBfCv9Mr4WzmoEvFSsA64AfTD92MX13YYUCccCFV5+OxvqXtXGNQpWZRZduskWTYodUwVApH5Dsfvzptza+fKFAWw0RZzPW6oNOZQl1nKC96nSXeQSbb4gicl4RMVyd3fHLAvI8sZA36c=
+  - secure: kxDccRW5WlPTzwAGwwcvwDScZu2DaZZhPVzwv4gUtBuZfbCtmCAY5vccSVwp8azobrgVg4qjplbJbW7Dur6qHRtjHNTGGkaQK73hma+n+JNElTYgsOLNCVFUzADavgLt7E0XkUAuzr1lwhAmDK1sSzwVrx/2m4C2CpLiVN7I0ks+9UMB4FkFvaUVwqWskgJQX2q7wijgJnSJp9tMaoOXl/53VzZcBreFxgRqVyl6eEMVI3c5ZZKs0ttzwOxEJBJVPvisBQnIWbshqDxNWQVpRx4YxcImRy1MB81TpasqkfuAtgOGN336h5vTfwRPcyOUwxvhtoatTo3+ICN7nnb72oVmlBJofAxvXkljAtpSBLPGxyz0rZI/iLjywRMipnuBAJWpoeF9OsbXJsIoHfL5iAyKBo0IrRb0K6ObZAU8AlQn4XF1FoTrTmI9ZygGyTSZsvZPBUExIiMd0ylbYbU0nktud+rXX5rL4nWh0c4h1q9Qsn4n8xBMzdeKpjZMpYdvtKmo8caf1Kgk0qDhZKkGWRmGY2AJ8LA0sEdkk1Sn5llZmErS2hIOGaygGJxJbIjVRehlp5mC9eSbypcSacFzotA3skeTUwdBIqt2ALHbq6bvFzbpLFQJyQOkDyPDQckn6F46DLPrfsTjUhRytLvfiJ4pcqxzkDKoZhZlSyyaNKU=
+  - secure: n9vZ1S9bZmnwjvO0Mz/OX2dOoKQnd1GnlgtmCVONHmxqzRAKij+lG1RXd4h7gbaXKhP7I5iACT6epaOp9d3Of5bQGe+Tj4YMaob87Zrgwkfa6vKt2B6OJKuHG8XjnYDgpvgrlTNkOpX5m4Mf9PLUew2QbfVtgd+WKeSfXTpl2hSHf3lBYARbwIniCDPW6Iws722p63/fe88ViNGA3aT1ODgY+AQv/m01fMwxj2oia+jLo9nnwCl4yvQBP2yNSlF1aqKiSTy2wI/IAUllHWqvvdjR544ML2uGiHNpo2iDuf5vpF+oU58GHGtUn3sMGYR457qMj6xf/oMEmt9YOx3zRzrEd8M6n/jYUzic16qp41wmFWoDGDGYq4zGBl833R024Xrr4QqjxFCidycVPESBP/Kwx54JvGQJ7DtzHezkOPpmyA/mcC4RrK9f4aRybE9bfFxQwlFU5UHboaX6CSwGC85TWC5hhbY88SB11l0iFVY9XAL/PrS80SXFK6sTpb4gSEE+MVeziACQJNDaGis1KGjot/GmOGGBfCv9Mr4WzmoEvFSsA64AfTD92MX13YYUCccCFV5+OxvqXtXGNQpWZRZduskWTYodUwVApH5Dsfvzptza+fKFAWw0RZzPW6oNOZQl1nKC96nSXeQSbb4gicl4RMVyd3fHLAvI8sZA36c=
+  - secure: suXkUkAGhli3rtovLSBZrUX51heRd4axdlHe1pXq+hwK6U4EJrVNPECjbxEHHfPeyAnzSKxGzoxZrMwa+PKjfkTT2qdA0hAKNzAoDK7xUlq4N+FHdJ218CjGxSStWTo/DRCsl9Wjks6gdsxPimRBgysHK1Wt5d8/Ft+sHtZNwoVIhdW+K0/lyxtbMRz9CfxcKuTTUujPOUVxsRNHG/kwMf/QbcWUFmH8mh8jxWnCKrwXGExSVccJrKkGa5zdI+gaw41Dp/Xq1ToDTfjCyo3/pcmHZPUmQpBJG9yuhbyIMzG2ZJtCHv797H/uCvtfXox3VHwojoFxbJp5NRXLsc85vJ4ZkD/2BWncGlfDtF56pBfnuRsaMugEyqSN/RwnnV6ed5FSYW51n7jmXLIqqCdq0cIjpYUVxo2nHVoyM+c2EDc8Z1u+qcYHmqmgLY23I0OBj7TzlnQUtjbIYvdfQwsNlNEXhoLAvbFSddGd06ggLmLhS7VW9kAu3OPokROSKakvGr5vNKfOR1xSZN9ucQ7kOrqyrNQ/2UEvbSin5JdxZu/K7WfV4ZsBj4pTkUjD0IRVawMpYcejTP/aD6S6T1IGapk52caNxljWXmXbsCh04NeRhdjao+0QLpjT1IVP/lLfsBvmo8MPf3aHw3Tfiygcs3hVEiNJQUaAWFnPyhvL4PM=
