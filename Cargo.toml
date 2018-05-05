@@ -3,8 +3,9 @@ name = "genpass"
 version = "0.1.0"
 authors = ["Cyryl Płotnicki <cyplo@cyplo.net>"]
 description = "A simple yet robust commandline random password generator."
-license = "AGPL-3.0-only"
 repository = "https://github.com/cyplo/genpass"
+license-file = "LICENSE"
+readme = "README.md"
 
 [badges]
 travis-ci = { repository = "cyplo/genpass", branch = "master" }
