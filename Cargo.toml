@@ -1,13 +1,17 @@
 [package]
 name = "genpass"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Cyryl Płotnicki <cyplo@cyplo.net>"]
 description = "A simple yet robust commandline random password generator."
 repository = "https://github.com/cyplo/genpass"
+
 license-file = "LICENSE"
 readme = "README.md"
 
 [badges]
+maintenance = { status = "experimental" }
+is-it-maintained-issue-resolution = { repository = "cyplo/genpass" }
+is-it-maintained-open-issues = { repository = "cyplo/genpass" }
 travis-ci = { repository = "cyplo/genpass", branch = "master" }
 codecov = { repository = "cyplo/genpass", branch = "master", service = "github" }
 
