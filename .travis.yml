@@ -15,6 +15,7 @@ script:
 cache: cargo
 
 before_deploy:
+  - git checkout $TRAVIS_BRANCH
   - cargo login $CRATES_TOKEN
   - cargo release --no-dev-version --no-confirm patch
 
