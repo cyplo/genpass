@@ -29,6 +29,8 @@ deploy:
     repo: cyplo/genpass
     branch: master
     condition: "$TRAVIS_RUST_VERSION = stable"
+    tags: false
+
   skip_cleanup: true
 
 addons:
