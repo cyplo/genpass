@@ -3,6 +3,9 @@ language: rust
 rust:
   - stable
 
+install:
+  - cargo install cargo-release
+
 script:
   - cargo test
   - "./ci/upload-coverage-data.sh"
@@ -12,22 +15,27 @@ cache: cargo
 before_deploy:
   - cargo doc
   - cargo package
-  - cargo install cargo-release
-  - cargo release --no-dev-version --no-confirm patch
 
 deploy:
-  provider: releases
-  api_key:
-    secure: FIeSnm0af8vSz66m2PQoADByE71Aw18sUmYlWxYUbV/qGbstHvIqMtcXcy+NMLT/Z9Y1nU9HZVbSdJtK8L5YX3lnLxy45NDs9SvzOzLCN+z3qhI3RXlXJhq7evO+ucyLEVRk4mbgP5MQDF1x/lxHPvKkQsOcD0FlPVJWzaFh0u8bYaBqY6hpQksuZJxbraUw4mNVK9MMPh7YFS6PGBJAOBK5cveS7X/s6yR37mzSsMs7Jsx8SnaGwNgMEE5lbCSv1rUq4ZBaBaqNGuk0NBbXzZeaPdK49ozkjmI12A2MfXZUvhYmtBWqi8pE0X5MxLm2xUpnHcPTG3X6Cv3wLmLqFXEZQDHjIO61+1mp92UmSNNe+cmagT80T4lB1W06Azrv9O8lsgyiIbU9WUd7rIarnyN2xw1QxOEUXVCKxWTcANdn5HRwSV7oEzGK0GbfQg6Yd/9hdGAojNmsVw6ECmwPTDluEJpHYPjsRuXRHMwqlRI3LD3SPfvZqNd3MBRdG54JyQjymROdNMWfCTLOG9sfG0SfUwbOdWs25id5VIADAMRk8n5TGcNH5B70+kPkvrWFFCnZjk/sQx3AJXJLzyAJ1WBBe3TYGu0JGWwHdkcoaLAnDqcg5Z+5v3B5b8Xsgl2MB7Ri150uL/ihlIB6uMFt42LeDWE1nht5t+enQ5M44vQ=
-  file: target/package/roaring-$TRAVIS_TAG.crate
-  on:
-    repo: cyplo/genpass
-    branch: master
-    condition: "$TRAVIS_RUST_VERSION = stable"
-  skip_cleanup: true
+  - provider: script
+    script:
+      - cargo login $CRATES_TOKEN
+      - cargo release --no-dev-version --no-confirm patch
+    on:
+      repo: cyplo/genpass
+      branch: master
+      condition: "$TRAVIS_RUST_VERSION = stable"
+    skip_cleanup: true
 
-after_deploy:
-  - cargo publish --token "$CRATES_TOKEN"
+  - provider: releases
+    api_key:
+      secure: FIeSnm0af8vSz66m2PQoADByE71Aw18sUmYlWxYUbV/qGbstHvIqMtcXcy+NMLT/Z9Y1nU9HZVbSdJtK8L5YX3lnLxy45NDs9SvzOzLCN+z3qhI3RXlXJhq7evO+ucyLEVRk4mbgP5MQDF1x/lxHPvKkQsOcD0FlPVJWzaFh0u8bYaBqY6hpQksuZJxbraUw4mNVK9MMPh7YFS6PGBJAOBK5cveS7X/s6yR37mzSsMs7Jsx8SnaGwNgMEE5lbCSv1rUq4ZBaBaqNGuk0NBbXzZeaPdK49ozkjmI12A2MfXZUvhYmtBWqi8pE0X5MxLm2xUpnHcPTG3X6Cv3wLmLqFXEZQDHjIO61+1mp92UmSNNe+cmagT80T4lB1W06Azrv9O8lsgyiIbU9WUd7rIarnyN2xw1QxOEUXVCKxWTcANdn5HRwSV7oEzGK0GbfQg6Yd/9hdGAojNmsVw6ECmwPTDluEJpHYPjsRuXRHMwqlRI3LD3SPfvZqNd3MBRdG54JyQjymROdNMWfCTLOG9sfG0SfUwbOdWs25id5VIADAMRk8n5TGcNH5B70+kPkvrWFFCnZjk/sQx3AJXJLzyAJ1WBBe3TYGu0JGWwHdkcoaLAnDqcg5Z+5v3B5b8Xsgl2MB7Ri150uL/ihlIB6uMFt42LeDWE1nht5t+enQ5M44vQ=
+    file: target/package/roaring-$TRAVIS_TAG.crate
+    on:
+      repo: cyplo/genpass
+      branch: master
+      condition: "$TRAVIS_RUST_VERSION = stable"
+    skip_cleanup: true
 
 addons:
   apt:
