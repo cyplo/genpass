@@ -17,7 +17,7 @@ addons:
       - libiberty-dev
 
 after_success:
- - ./ci/upload-coverage-data
+ - ./ci/upload-coverage-data.sh
 
 env:
   global:
