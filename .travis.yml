@@ -12,7 +12,12 @@ script:
 - cargo doc
 - cargo package
 
-cache: cargo
+cache:
+  directories:
+    - target/debug
+    - target/release
+    - target/kcov
+    - /home/travis/.cargo
 
 before_deploy:
 - git checkout $TRAVIS_BRANCH
@@ -30,7 +35,7 @@ deploy:
     branch: master
     condition: "$TRAVIS_RUST_VERSION = stable"
     condition: "-z $TRAVIS_TAG"
-    condition: "`git log -n 1 --pretty='%an'` =~ 'Travis'"
+    condition: "! (`git log -n 1 --pretty='%an'` =~ 'Travis')"
 
   skip_cleanup: true
 
