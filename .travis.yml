@@ -1,6 +1,37 @@
+sudo: required
 language: rust
 rust:
-  - stable
+- stable
 script:
-  - cargo test
-  - cargo package
+- cargo test
+- cargo package
+
+addons:
+  apt:
+    packages:
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+      - cmake
+      - gcc
+      - binutils-dev
+      - libiberty-dev
+
+after_success: |
+  wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz &&
+  tar xzf master.tar.gz &&
+  cd kcov-master &&
+  mkdir build &&
+  cd build &&
+  cmake .. &&
+  make &&
+  make install DESTDIR=../../kcov-build &&
+  cd ../.. &&
+  rm -rf kcov-master &&
+  for file in target/debug/examplerust-*[^\.d]; do mkdir -p "target/cov/$(basename $file)"; ./kcov-build/usr/local/bin/kcov --exclude-pattern=/.cargo,/usr/lib --verify "target/cov/$(basename $file)" "$file"; done &&
+  bash <(curl -s https://codecov.io/bash) &&
+  echo "Uploaded code coverage"
+
+env:
+  global:
+    secure: kxDccRW5WlPTzwAGwwcvwDScZu2DaZZhPVzwv4gUtBuZfbCtmCAY5vccSVwp8azobrgVg4qjplbJbW7Dur6qHRtjHNTGGkaQK73hma+n+JNElTYgsOLNCVFUzADavgLt7E0XkUAuzr1lwhAmDK1sSzwVrx/2m4C2CpLiVN7I0ks+9UMB4FkFvaUVwqWskgJQX2q7wijgJnSJp9tMaoOXl/53VzZcBreFxgRqVyl6eEMVI3c5ZZKs0ttzwOxEJBJVPvisBQnIWbshqDxNWQVpRx4YxcImRy1MB81TpasqkfuAtgOGN336h5vTfwRPcyOUwxvhtoatTo3+ICN7nnb72oVmlBJofAxvXkljAtpSBLPGxyz0rZI/iLjywRMipnuBAJWpoeF9OsbXJsIoHfL5iAyKBo0IrRb0K6ObZAU8AlQn4XF1FoTrTmI9ZygGyTSZsvZPBUExIiMd0ylbYbU0nktud+rXX5rL4nWh0c4h1q9Qsn4n8xBMzdeKpjZMpYdvtKmo8caf1Kgk0qDhZKkGWRmGY2AJ8LA0sEdkk1Sn5llZmErS2hIOGaygGJxJbIjVRehlp5mC9eSbypcSacFzotA3skeTUwdBIqt2ALHbq6bvFzbpLFQJyQOkDyPDQckn6F46DLPrfsTjUhRytLvfiJ4pcqxzkDKoZhZlSyyaNKU=
