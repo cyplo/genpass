@@ -53,7 +53,7 @@ version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "genpasswd"
+name = "genpass"
 version = "0.1.0"
 dependencies = [
  "quickcheck 0.6.2 (registry+https://github.com/rust-lang/crates.io-index)",

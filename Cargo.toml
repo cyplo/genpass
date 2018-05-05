@@ -1,7 +1,10 @@
 [package]
-name = "genpasswd"
+name = "genpass"
 version = "0.1.0"
 authors = ["Cyryl Płotnicki <cyplo@cyplo.net>"]
+description = "A simple yet robust commandline random password generator."
+license-file = "LICENSE"
+repository = "https://github.com/cyplo/genpass"
 
 [dependencies]
 rand = "0.4.2"
