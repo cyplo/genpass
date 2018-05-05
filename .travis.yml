@@ -6,6 +6,7 @@ rust:
 script:
 - cargo test
 - cargo package
+- ./ci/upload-coverage-data.sh
 
 cache: cargo
 
@@ -19,9 +20,6 @@ addons:
     - gcc
     - binutils-dev
     - libiberty-dev
-
-after_success:
-- "./ci/upload-coverage-data.sh"
 
 env:
   global:
