@@ -5,21 +5,19 @@ rust:
 script:
 - cargo test
 - cargo package
-
 addons:
   apt:
     packages:
-      - libcurl4-openssl-dev
-      - libelf-dev
-      - libdw-dev
-      - cmake
-      - gcc
-      - binutils-dev
-      - libiberty-dev
-
+    - libcurl4-openssl-dev
+    - libelf-dev
+    - libdw-dev
+    - cmake
+    - gcc
+    - binutils-dev
+    - libiberty-dev
 after_success:
- - ./ci/upload-coverage-data.sh
-
+- "./ci/upload-coverage-data.sh"
 env:
   global:
-    secure: kxDccRW5WlPTzwAGwwcvwDScZu2DaZZhPVzwv4gUtBuZfbCtmCAY5vccSVwp8azobrgVg4qjplbJbW7Dur6qHRtjHNTGGkaQK73hma+n+JNElTYgsOLNCVFUzADavgLt7E0XkUAuzr1lwhAmDK1sSzwVrx/2m4C2CpLiVN7I0ks+9UMB4FkFvaUVwqWskgJQX2q7wijgJnSJp9tMaoOXl/53VzZcBreFxgRqVyl6eEMVI3c5ZZKs0ttzwOxEJBJVPvisBQnIWbshqDxNWQVpRx4YxcImRy1MB81TpasqkfuAtgOGN336h5vTfwRPcyOUwxvhtoatTo3+ICN7nnb72oVmlBJofAxvXkljAtpSBLPGxyz0rZI/iLjywRMipnuBAJWpoeF9OsbXJsIoHfL5iAyKBo0IrRb0K6ObZAU8AlQn4XF1FoTrTmI9ZygGyTSZsvZPBUExIiMd0ylbYbU0nktud+rXX5rL4nWh0c4h1q9Qsn4n8xBMzdeKpjZMpYdvtKmo8caf1Kgk0qDhZKkGWRmGY2AJ8LA0sEdkk1Sn5llZmErS2hIOGaygGJxJbIjVRehlp5mC9eSbypcSacFzotA3skeTUwdBIqt2ALHbq6bvFzbpLFQJyQOkDyPDQckn6F46DLPrfsTjUhRytLvfiJ4pcqxzkDKoZhZlSyyaNKU=
+  - secure: kxDccRW5WlPTzwAGwwcvwDScZu2DaZZhPVzwv4gUtBuZfbCtmCAY5vccSVwp8azobrgVg4qjplbJbW7Dur6qHRtjHNTGGkaQK73hma+n+JNElTYgsOLNCVFUzADavgLt7E0XkUAuzr1lwhAmDK1sSzwVrx/2m4C2CpLiVN7I0ks+9UMB4FkFvaUVwqWskgJQX2q7wijgJnSJp9tMaoOXl/53VzZcBreFxgRqVyl6eEMVI3c5ZZKs0ttzwOxEJBJVPvisBQnIWbshqDxNWQVpRx4YxcImRy1MB81TpasqkfuAtgOGN336h5vTfwRPcyOUwxvhtoatTo3+ICN7nnb72oVmlBJofAxvXkljAtpSBLPGxyz0rZI/iLjywRMipnuBAJWpoeF9OsbXJsIoHfL5iAyKBo0IrRb0K6ObZAU8AlQn4XF1FoTrTmI9ZygGyTSZsvZPBUExIiMd0ylbYbU0nktud+rXX5rL4nWh0c4h1q9Qsn4n8xBMzdeKpjZMpYdvtKmo8caf1Kgk0qDhZKkGWRmGY2AJ8LA0sEdkk1Sn5llZmErS2hIOGaygGJxJbIjVRehlp5mC9eSbypcSacFzotA3skeTUwdBIqt2ALHbq6bvFzbpLFQJyQOkDyPDQckn6F46DLPrfsTjUhRytLvfiJ4pcqxzkDKoZhZlSyyaNKU=
+  - secure: n9vZ1S9bZmnwjvO0Mz/OX2dOoKQnd1GnlgtmCVONHmxqzRAKij+lG1RXd4h7gbaXKhP7I5iACT6epaOp9d3Of5bQGe+Tj4YMaob87Zrgwkfa6vKt2B6OJKuHG8XjnYDgpvgrlTNkOpX5m4Mf9PLUew2QbfVtgd+WKeSfXTpl2hSHf3lBYARbwIniCDPW6Iws722p63/fe88ViNGA3aT1ODgY+AQv/m01fMwxj2oia+jLo9nnwCl4yvQBP2yNSlF1aqKiSTy2wI/IAUllHWqvvdjR544ML2uGiHNpo2iDuf5vpF+oU58GHGtUn3sMGYR457qMj6xf/oMEmt9YOx3zRzrEd8M6n/jYUzic16qp41wmFWoDGDGYq4zGBl833R024Xrr4QqjxFCidycVPESBP/Kwx54JvGQJ7DtzHezkOPpmyA/mcC4RrK9f4aRybE9bfFxQwlFU5UHboaX6CSwGC85TWC5hhbY88SB11l0iFVY9XAL/PrS80SXFK6sTpb4gSEE+MVeziACQJNDaGis1KGjot/GmOGGBfCv9Mr4WzmoEvFSsA64AfTD92MX13YYUCccCFV5+OxvqXtXGNQpWZRZduskWTYodUwVApH5Dsfvzptza+fKFAWw0RZzPW6oNOZQl1nKC96nSXeQSbb4gicl4RMVyd3fHLAvI8sZA36c=
