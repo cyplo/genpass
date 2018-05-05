@@ -7,7 +7,7 @@ use rand::os::OsRng;
 use rand::Rng;
 
 fn main() {
-    println!("Hello, world!");
+    println!("{}", generate_password(32));
 }
 
 fn generate_password(length: usize) -> String {
