@@ -14,8 +14,6 @@ script:
 
 cache:
   directories:
-    - target/debug
-    - target/release
     - target/kcov
     - /home/travis/.cargo
 
