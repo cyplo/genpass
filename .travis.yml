@@ -12,6 +12,8 @@ cache: cargo
 before_deploy:
   - cargo doc
   - cargo package
+  - cargo install cargo-release
+  - cargo release --no-dev-version patch
 
 deploy:
   provider: releases
@@ -20,8 +22,9 @@ deploy:
   file: target/package/roaring-$TRAVIS_TAG.crate
   on:
     repo: cyplo/genpass
-    tags: true
+    branch: master
     condition: "$TRAVIS_RUST_VERSION = stable"
+  skip_cleanup: true
 
 after_deploy:
   - cargo publish --token "$CRATES_TOKEN"
