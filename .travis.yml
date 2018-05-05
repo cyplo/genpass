@@ -1,4 +1,6 @@
 language: rust
 rust:
   - stable
-
+script:
+  - cargo test
+  - cargo package
