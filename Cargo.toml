@@ -4,7 +4,6 @@ version = "0.1.8"
 authors = ["Cyryl Płotnicki <cyplo@cyplo.net>"]
 description = "A simple yet robust commandline random password generator."
 repository = "https://github.com/cyplo/genpass"
-
 license-file = "LICENSE"
 readme = "README.md"
 
@@ -17,6 +16,8 @@ codecov = { repository = "cyplo/genpass", branch = "master", service = "github" 
 
 [dependencies]
 rand = "0.4.2"
+clap = "2.31.2"
 
 [dev-dependencies]
 quickcheck = "0.6.2"
+
