@@ -9,21 +9,62 @@ extern crate clap;
 use clap::{App, Arg};
 
 fn main() {
-    let options = App::new("genpass")
-        .arg(
-            Arg::with_name("length")
-                .short("l")
-                .index(1)
-                .default_value("32"),
-        )
-        .get_matches();
-    let length: usize = options.value_of("length").unwrap().parse().unwrap();
+    let commandline_options = parse_commandline_options();
+    let generation_options = get_generation_options(commandline_options);
 
     let mut rng = OsRng::new().expect("Error opening OS random number generator");
     println!(
         "{}",
-        generate_password(length, GenerationOptions::Default, &mut rng)
+        generate_password(commandline_options.length, generation_options, &mut rng)
     );
+}
+
+fn get_generation_options(commandline_options: CommandlineOptions) -> GenerationOptions {
+    if !commandline_options.include_lowercase
+        && !commandline_options.include_uppercase {
+        return GenerationOptions::Default
+    }
+    let mut options = Vec::new();
+    if commandline_options.include_lowercase { options.push(GenerationOption::Lowercase);}
+    if commandline_options.include_uppercase { options.push(GenerationOption::Uppercase);}
+    GenerationOptions::Custom(options)
+}
+
+#[derive(Copy, Clone)]
+struct CommandlineOptions {
+    length: usize,
+    include_lowercase: bool,
+    include_uppercase: bool
+}
+
+fn parse_commandline_options() -> CommandlineOptions {
+    let length_option_name = "length";
+    let include_lowercase_option_name = "include-lowercase";
+    let include_uppercase_option_name = "include-uppercase";
+    let options = App::new("genpass")
+        .arg(
+            Arg::with_name(length_option_name)
+                .short("l")
+                .index(1)
+                .default_value("32"),
+        )
+        .arg(
+            Arg::with_name(include_lowercase_option_name)
+                .short("l")
+                .help("Include at least one lowercase character")
+                .takes_value(false),
+        )
+        .arg(
+            Arg::with_name(include_uppercase_option_name)
+                .short("u")
+                .help("Include at least one uppercase character")
+                .takes_value(false),
+        )
+        .get_matches();
+    let length: usize = options.value_of(length_option_name).unwrap().parse().unwrap();
+    let include_lowercase = options.is_present(include_lowercase_option_name);
+    let include_uppercase = options.is_present(include_uppercase_option_name);
+    CommandlineOptions { length, include_lowercase, include_uppercase }
 }
 
 fn generate_password<Rng: rand::Rng>(
@@ -41,13 +82,15 @@ fn generate_alphabet(options: GenerationOptions) -> Vec<char> {
     let uppercase = "A".chars();
     let mut alphabet = Vec::new();
     let options_list = match options {
-        GenerationOptions::Default => vec![GenerationOption::Uppercase, GenerationOption::Lowercase],
-        GenerationOptions::Custom(list) => list
+        GenerationOptions::Default => {
+            vec![GenerationOption::Uppercase, GenerationOption::Lowercase]
+        }
+        GenerationOptions::Custom(list) => list,
     };
     for option in options_list {
         let subalphabet = match option {
             GenerationOption::Uppercase => uppercase.clone(),
-            GenerationOption::Lowercase => lowercase.clone()
+            GenerationOption::Lowercase => lowercase.clone(),
         };
         alphabet.extend(subalphabet);
     }
@@ -57,7 +100,7 @@ fn generate_alphabet(options: GenerationOptions) -> Vec<char> {
 fn generate_password_from_alphabet<Rng: rand::Rng>(
     length: usize,
     rng: &mut Rng,
-    mut alphabet: Vec<char>,
+    alphabet: Vec<char>,
 ) -> String {
     let mut password = String::with_capacity(length);
     while password.len() < length {
