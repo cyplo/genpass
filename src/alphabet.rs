@@ -1,9 +1,9 @@
 bitflags! {
     pub struct Alphabets:u8 {
-        const NONE      = 0;
-        const LOWERCASE = 2^0;
-        const UPPERCASE = 2^1;
-        const ALL = u8::max_value();
+        const NONE      = 0b0;
+        const LOWERCASE = 0b00000001;
+        const UPPERCASE = 0b00000010;
+        const ALL       = u8::max_value();
     }
 }
 
