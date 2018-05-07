@@ -55,7 +55,7 @@ fn commandline_options_for_matches(matches: ArgMatches) -> CommandlineOptions {
 }
 
 fn generation_options_for_commandline_options(options: CommandlineOptions) -> GenerationOptions {
-    let mut alphabets = Alphabets::NONE;
+    let mut alphabets = Alphabets::default();
     if options.include_lowercase {
         alphabets |= Alphabets::LOWERCASE;
     }
@@ -63,7 +63,7 @@ fn generation_options_for_commandline_options(options: CommandlineOptions) -> Ge
         alphabets |= Alphabets::UPPERCASE;
     }
     if alphabets.is_empty() {
-        alphabets = Alphabets::ALL;
+        alphabets = Alphabets::all();
     }
     GenerationOptions {
         length: options.length,

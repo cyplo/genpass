@@ -41,7 +41,7 @@ mod must {
         fn generate_password_of_given_length(length: usize) -> bool {
           let mut rng = OsRng::new().unwrap();
           let password = generate_password(
-            GenerationOptions{ length, alphabets: Alphabets::ALL },
+            GenerationOptions{ length, alphabets: Alphabets::all()},
             &mut rng);
           password.len() == length
         }

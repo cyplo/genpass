@@ -1,9 +1,8 @@
 bitflags! {
+    #[derive(Default)]
     pub struct Alphabets:u8 {
-        const NONE      = 0b0000;
         const LOWERCASE = 0b0001;
         const UPPERCASE = 0b0010;
-        const ALL       = u8::max_value();
     }
 }
 
