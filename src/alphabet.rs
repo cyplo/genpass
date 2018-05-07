@@ -1,37 +1,23 @@
 bitflags! {
     pub struct Alphabets:u8 {
-        const NONE      = 0b0;
-        const LOWERCASE = 0b00000001;
-        const UPPERCASE = 0b00000010;
+        const NONE      = 0b0000;
+        const LOWERCASE = 0b0001;
+        const UPPERCASE = 0b0010;
         const ALL       = u8::max_value();
     }
 }
 
+const LOWERCASE_LETTERS: &'static str = "a";
+const UPPERCASE_LETTERS: &'static str ="A";
+
 pub fn generate_alphabet(subalphabets: Alphabets) -> Vec<char> {
-    let lowercase = "a".chars();
-    let uppercase = "A".chars();
     let mut resulting_alphabet = Vec::new();
     if subalphabets.contains(Alphabets::UPPERCASE) {
-        resulting_alphabet.extend(uppercase);
+        resulting_alphabet.extend(UPPERCASE_LETTERS.chars());
     }
     if subalphabets.contains(Alphabets::LOWERCASE) {
-        resulting_alphabet.extend(lowercase);
+        resulting_alphabet.extend(LOWERCASE_LETTERS.chars());
     }
     resulting_alphabet
 }
 
-#[cfg(test)]
-mod must {
-    use super::*;
-
-    use rand::StdRng;
-    use rand::SeedableRng;
-    use quickcheck::TestResult;
-
-    quickcheck! {
-        fn be_all_when_none_specified() -> bool {
-            false
-        }
-    }
-
-}
