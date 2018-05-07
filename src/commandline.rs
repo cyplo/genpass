@@ -72,7 +72,7 @@ fn generation_options_for_commandline_options(options: CommandlineOptions) -> Ge
     if options.include_uppercase {
         alphabets |= Alphabets::UPPERCASE;
     }
-    if options.include_digit{
+    if options.include_digit {
         alphabets |= Alphabets::DIGIT;
     }
     if alphabets.is_empty() {
