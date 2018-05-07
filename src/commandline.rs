@@ -62,9 +62,6 @@ fn generation_options_for_commandline_options(options: CommandlineOptions) -> Ge
     if options.include_uppercase {
         alphabets |= Alphabets::UPPERCASE;
     }
-    if alphabets.is_empty() {
-        alphabets = Alphabets::all();
-    }
     GenerationOptions {
         length: options.length,
         alphabets,

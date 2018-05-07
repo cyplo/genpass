@@ -1,8 +1,13 @@
 bitflags! {
-    #[derive(Default)]
     pub struct Alphabets:u8 {
         const LOWERCASE = 0b0001;
         const UPPERCASE = 0b0010;
+    }
+}
+
+impl Default for Alphabets {
+    fn default() -> Self {
+        Alphabets::all()
     }
 }
 
