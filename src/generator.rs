@@ -1,5 +1,4 @@
 use rand;
-use rand::os::OsRng;
 use alphabet::Alphabets;
 use alphabet::generate_alphabet;
 
@@ -35,6 +34,7 @@ mod must {
 
     use rand::StdRng;
     use rand::SeedableRng;
+    use rand::os::OsRng;
     use quickcheck::TestResult;
 
     quickcheck! {
