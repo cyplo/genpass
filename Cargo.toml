@@ -15,6 +15,7 @@ travis-ci = { repository = "cyplo/genpass", branch = "master" }
 codecov = { repository = "cyplo/genpass", branch = "master", service = "github" }
 
 [dependencies]
+bitflags = "1.0"
 rand = "0.4.2"
 clap = "2.31.2"
 
