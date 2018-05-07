@@ -59,6 +59,13 @@ mod must {
             GenerationOptions { length, alphabets: Alphabets::UPPERCASE },
             &|character| character.is_ascii_uppercase() )
         }
+
+        fn support_digits(length: usize, seed: Vec<usize>) -> TestResult {
+          test_generated_password_characters(
+            seed,
+            GenerationOptions { length, alphabets: Alphabets::DIGIT},
+            &|character| character.is_digit(10) )
+        }
     }
 
     fn test_generated_password_characters(
