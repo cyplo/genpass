@@ -28,10 +28,18 @@ pub fn get_generation_options() -> GenerationOptions {
                 .takes_value(false),
         )
         .get_matches();
-    options_for_matches(matches)
+    let commandline_options = commandline_options_for_matches(matches);
+    generation_options_for_commandline_options(commandline_options)
 }
 
-fn options_for_matches(matches: ArgMatches) -> GenerationOptions {
+#[derive(Copy, Clone)]
+struct CommandlineOptions {
+    length: usize,
+    include_lowercase: bool,
+    include_uppercase: bool,
+}
+
+fn commandline_options_for_matches(matches: ArgMatches) -> CommandlineOptions {
     let length = matches
         .value_of(LENGTH_OPTION_NAME)
         .unwrap()
@@ -39,31 +47,45 @@ fn options_for_matches(matches: ArgMatches) -> GenerationOptions {
         .unwrap();
     let include_lowercase = matches.is_present(INCLUDE_LOWERCASE_OPTION_NAME);
     let include_uppercase = matches.is_present(INCLUDE_UPPERCASE_OPTION_NAME);
-    let mut alphabets = Alphabets::NONE;
-    if include_lowercase {
-        alphabets |= Alphabets::LOWERCASE;
+    CommandlineOptions {
+        length,
+        include_lowercase,
+        include_uppercase,
     }
-    if include_uppercase {
-        alphabets |= Alphabets::UPPERCASE;
-    }
-    GenerationOptions { length, alphabets }
 }
 
+fn generation_options_for_commandline_options(options: CommandlineOptions) -> GenerationOptions {
+    let mut alphabets = Alphabets::NONE;
+    if options.include_lowercase {
+        alphabets |= Alphabets::LOWERCASE;
+    }
+    if options.include_uppercase {
+        alphabets |= Alphabets::UPPERCASE;
+    }
+    if alphabets.is_empty() {
+        alphabets = Alphabets::ALL;
+    }
+    GenerationOptions {
+        length: options.length,
+        alphabets,
+    }
+}
+
+#[cfg(test)]
 mod must {
 
     use super::*;
-    use std::collections::HashMap;
 
     #[test]
     fn default_to_all_alphabets_when_no_commandline_flags() {
-        let matches = ArgMatches {
-            args: HashMap::new(),
-            subcommand: None,
-            usage: None,
+        let commandline_options = CommandlineOptions {
+            length: 0,
+            include_lowercase: false,
+            include_uppercase: false,
         };
 
-        let options = options_for_matches(matches);
+        let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert!(options.alphabets.is_all());
+        assert!(generation_options.alphabets.is_all());
     }
 }
