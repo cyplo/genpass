@@ -1,34 +1,44 @@
-use clap::{App, Arg};
+use clap::{App, Arg, ArgMatches};
 use alphabet::Alphabets;
 use generator::GenerationOptions;
 
+const LENGTH_OPTION_NAME: &'static str = "length";
+const INCLUDE_LOWERCASE_OPTION_NAME: &'static str = "include-lowercase";
+const INCLUDE_UPPERCASE_OPTION_NAME: &'static str = "include-uppercase";
+const DEFAULT_LENGTH: &'static str = "32";
+
 pub fn get_generation_options() -> GenerationOptions {
-    let length_option_name = "length";
-    let include_lowercase_option_name = "include-lowercase";
-    let include_uppercase_option_name = "include-uppercase";
-    let options = App::new("genpass")
+    let matches = App::new("genpass")
         .arg(
-            Arg::with_name(length_option_name)
+            Arg::with_name(LENGTH_OPTION_NAME)
                 .short("l")
                 .index(1)
-                .default_value("32"),
+                .default_value(DEFAULT_LENGTH),
         )
         .arg(
-            Arg::with_name(include_lowercase_option_name)
+            Arg::with_name(INCLUDE_LOWERCASE_OPTION_NAME)
                 .short("l")
                 .help("Include at least one lowercase character")
                 .takes_value(false),
         )
         .arg(
-            Arg::with_name(include_uppercase_option_name)
+            Arg::with_name(INCLUDE_UPPERCASE_OPTION_NAME)
                 .short("u")
                 .help("Include at least one uppercase character")
                 .takes_value(false),
         )
         .get_matches();
-    let length = value_t!(options, length_option_name, usize).unwrap_or(32);
-    let include_lowercase = options.is_present(include_lowercase_option_name);
-    let include_uppercase = options.is_present(include_uppercase_option_name);
+    options_for_matches(matches)
+}
+
+fn options_for_matches(matches: ArgMatches) -> GenerationOptions {
+    let length = matches
+        .value_of(LENGTH_OPTION_NAME)
+        .unwrap()
+        .parse::<usize>()
+        .unwrap();
+    let include_lowercase = matches.is_present(INCLUDE_LOWERCASE_OPTION_NAME);
+    let include_uppercase = matches.is_present(INCLUDE_UPPERCASE_OPTION_NAME);
     let mut alphabets = Alphabets::NONE;
     if include_lowercase {
         alphabets |= Alphabets::LOWERCASE;
@@ -39,3 +49,21 @@ pub fn get_generation_options() -> GenerationOptions {
     GenerationOptions { length, alphabets }
 }
 
+mod must {
+
+    use super::*;
+    use std::collections::HashMap;
+
+    #[test]
+    fn default_to_all_alphabets_when_no_commandline_flags() {
+        let matches = ArgMatches {
+            args: HashMap::new(),
+            subcommand: None,
+            usage: None,
+        };
+
+        let options = options_for_matches(matches);
+
+        assert!(options.alphabets.is_all());
+    }
+}

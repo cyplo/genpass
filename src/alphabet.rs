@@ -8,7 +8,7 @@ bitflags! {
 }
 
 const LOWERCASE_LETTERS: &'static str = "a";
-const UPPERCASE_LETTERS: &'static str ="A";
+const UPPERCASE_LETTERS: &'static str = "A";
 
 pub fn generate_alphabet(subalphabets: Alphabets) -> Vec<char> {
     let mut resulting_alphabet = Vec::new();
@@ -20,4 +20,3 @@ pub fn generate_alphabet(subalphabets: Alphabets) -> Vec<char> {
     }
     resulting_alphabet
 }
-

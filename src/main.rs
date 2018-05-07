@@ -8,7 +8,6 @@ use rand::os::OsRng;
 #[macro_use]
 extern crate bitflags;
 
-#[macro_use]
 extern crate clap;
 
 mod commandline;
@@ -25,7 +24,3 @@ fn main() {
     let mut rng = OsRng::new().expect("Error opening OS random number generator");
     println!("{}", generate_password(generation_options, &mut rng));
 }
-
-
-
-
