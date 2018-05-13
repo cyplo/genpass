@@ -35,7 +35,6 @@ mod must {
 
     use super::*;
     use std::convert::From;
-    use std::ops::Range;
 
     #[test]
     fn have_all_different_cases_of_letters() {
@@ -56,7 +55,7 @@ mod must {
     #[test]
     fn have_all_alphanumeric_characters() {
         let alphabet = generate_alphabet(Alphabets::all());
-        let character_code_range: Range<u8> = 0..255;
+        let character_code_range = 0..=255;
         let all_alphanumeric_characters: Vec<char> = character_code_range
             .filter(|code| char::from(*code).is_ascii_alphanumeric())
             .map(|code| char::from(code))

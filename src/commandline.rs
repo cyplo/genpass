@@ -1,5 +1,5 @@
-use clap::{App, Arg, ArgMatches};
 use alphabet::Alphabets;
+use clap::{App, Arg, ArgMatches};
 use generator::GenerationOptions;
 
 const LENGTH_OPTION_NAME: &'static str = "length";

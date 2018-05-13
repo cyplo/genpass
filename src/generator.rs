@@ -1,6 +1,6 @@
-use rand;
 use alphabet::Alphabets;
 use alphabet::generate_alphabet;
+use rand;
 
 const MINIMUM_PASSWORD_LENGTH: usize = 4;
 
@@ -65,10 +65,10 @@ fn generate_password_from_alphabet<Rng: rand::Rng>(
 mod must {
     use super::*;
 
-    use rand::StdRng;
-    use rand::SeedableRng;
-    use rand::os::OsRng;
     use quickcheck::TestResult;
+    use rand::SeedableRng;
+    use rand::StdRng;
+    use rand::os::OsRng;
 
     #[test]
     #[should_panic]
