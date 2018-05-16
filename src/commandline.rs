@@ -40,11 +40,22 @@ pub fn get_generation_options() -> GenerationOptions {
 }
 
 #[derive(Copy, Clone)]
-struct CommandlineOptions {
-    length: usize,
+struct CharacterOptions {
     include_lowercase: bool,
     include_uppercase: bool,
     include_digit: bool,
+}
+
+#[derive(Copy, Clone)]
+enum ElementType {
+    Character(CharacterOptions),
+    Word,
+}
+
+#[derive(Copy, Clone)]
+struct CommandlineOptions {
+    length: usize,
+    element: ElementType,
 }
 
 fn commandline_options_for_matches(matches: ArgMatches) -> CommandlineOptions {
@@ -58,26 +69,33 @@ fn commandline_options_for_matches(matches: ArgMatches) -> CommandlineOptions {
     let include_digit = matches.is_present(INCLUDE_DIGIT_OPTION_NAME);
     CommandlineOptions {
         length,
-        include_lowercase,
-        include_uppercase,
-        include_digit,
+        element: ElementType::Character(CharacterOptions {
+            include_lowercase,
+            include_uppercase,
+            include_digit,
+        }),
     }
 }
 
 fn generation_options_for_commandline_options(options: CommandlineOptions) -> GenerationOptions {
     let mut alphabets = Alphabets::empty();
-    if options.include_lowercase {
-        alphabets |= Alphabets::LOWERCASE;
-    }
-    if options.include_uppercase {
-        alphabets |= Alphabets::UPPERCASE;
-    }
-    if options.include_digit {
-        alphabets |= Alphabets::DIGIT;
-    }
-    if alphabets.is_empty() {
-        alphabets = Alphabets::all();
-    }
+    match options.element {
+        ElementType::Character(options) => {
+            if options.include_lowercase {
+                alphabets |= Alphabets::LOWERCASE;
+            }
+            if options.include_uppercase {
+                alphabets |= Alphabets::UPPERCASE;
+            }
+            if options.include_digit {
+                alphabets |= Alphabets::DIGIT;
+            }
+            if alphabets.is_empty() {
+                alphabets = Alphabets::all();
+            }
+        }
+        ElementType::Word => {}
+    };
     GenerationOptions {
         length: options.length,
         alphabets,
@@ -93,9 +111,11 @@ mod must {
     fn support_lowercase_letters() {
         let commandline_options = CommandlineOptions {
             length: 0,
-            include_lowercase: true,
-            include_uppercase: false,
-            include_digit: false,
+            element: ElementType::Character(CharacterOptions {
+                include_lowercase: true,
+                include_uppercase: false,
+                include_digit: false,
+            }),
         };
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
@@ -107,9 +127,11 @@ mod must {
     fn support_uppercase_letters() {
         let commandline_options = CommandlineOptions {
             length: 0,
-            include_lowercase: false,
-            include_uppercase: true,
-            include_digit: false,
+            element: ElementType::Character(CharacterOptions {
+                include_lowercase: false,
+                include_uppercase: true,
+                include_digit: false,
+            }),
         };
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
@@ -121,9 +143,11 @@ mod must {
     fn support_digits() {
         let commandline_options = CommandlineOptions {
             length: 0,
-            include_lowercase: false,
-            include_uppercase: false,
-            include_digit: true,
+            element: ElementType::Character(CharacterOptions {
+                include_lowercase: false,
+                include_uppercase: false,
+                include_digit: true,
+            }),
         };
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
@@ -135,9 +159,11 @@ mod must {
     fn default_to_all_alphabets_when_no_commandline_flags() {
         let commandline_options = CommandlineOptions {
             length: 0,
-            include_lowercase: false,
-            include_uppercase: false,
-            include_digit: false,
+            element: ElementType::Character(CharacterOptions {
+                include_lowercase: false,
+                include_uppercase: false,
+                include_digit: false,
+            }),
         };
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
