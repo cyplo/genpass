@@ -65,7 +65,6 @@ mod must {
             .filter(|code| char::from(*code).is_ascii_alphanumeric())
             .map(|code| char::from(code))
             .collect();
-
         assert!(
             all_alphanumeric_characters
                 .iter()
