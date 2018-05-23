@@ -8,9 +8,11 @@ install:
 
 script:
 - cargo test
-- "./ci/upload-coverage-data.sh"
 - cargo doc
 - cargo package
+
+after_success:
+- "./ci/upload-coverage-data.sh"
 
 cache:
   directories:
