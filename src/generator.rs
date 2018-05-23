@@ -41,6 +41,11 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
                 .chars()
                 .any(|character| character.is_digit(10));
         }
+        if alphabets.contains(Alphabets::SPECIAL) {
+            password_correct &= password_candidate
+                .chars()
+                .any(|character| !character.is_alphanumeric());
+        }
         if password_correct {
             return password_candidate;
         }
@@ -116,6 +121,15 @@ mod must {
             GenerationOptions { length, alphabets: Alphabets::all()},
             &|character| character.is_digit(10) )
         }
+
+        fn support_special_chars(length: usize, seed: Vec<usize>) -> TestResult {
+            test_generated_password_characters(
+                seed,
+                GenerationOptions { length, alphabets: Alphabets::all()},
+                &|character| character.is_alphanumeric() )
+        }
+
+
     }
 
     fn test_generated_password_characters(
