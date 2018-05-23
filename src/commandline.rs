@@ -6,6 +6,7 @@ const LENGTH_OPTION_NAME: &'static str = "length";
 const INCLUDE_LOWERCASE_OPTION_NAME: &'static str = "include-lowercase";
 const INCLUDE_UPPERCASE_OPTION_NAME: &'static str = "include-uppercase";
 const INCLUDE_DIGIT_OPTION_NAME: &'static str = "include-digit";
+const INCLUDE_SPECIAL_OPTION_NAME: &'static str = "include-special";
 const DEFAULT_LENGTH: &'static str = "32";
 
 pub fn get_generation_options() -> GenerationOptions {
@@ -34,6 +35,12 @@ pub fn get_generation_options() -> GenerationOptions {
                 .help("Include at least one digit")
                 .takes_value(false),
         )
+        .arg(
+            Arg::with_name(INCLUDE_SPECIAL_OPTION_NAME)
+                .short("s")
+                .help("Include at least one (non alphanumeric) special character")
+                .takes_value(false),
+        )
         .get_matches();
     let commandline_options = commandline_options_for_matches(matches);
     generation_options_for_commandline_options(commandline_options)
@@ -45,6 +52,7 @@ struct CommandlineOptions {
     include_lowercase: bool,
     include_uppercase: bool,
     include_digit: bool,
+    include_special: bool,
 }
 
 fn commandline_options_for_matches(matches: ArgMatches) -> CommandlineOptions {
@@ -56,11 +64,13 @@ fn commandline_options_for_matches(matches: ArgMatches) -> CommandlineOptions {
     let include_lowercase = matches.is_present(INCLUDE_LOWERCASE_OPTION_NAME);
     let include_uppercase = matches.is_present(INCLUDE_UPPERCASE_OPTION_NAME);
     let include_digit = matches.is_present(INCLUDE_DIGIT_OPTION_NAME);
+    let include_special = matches.is_present(INCLUDE_SPECIAL_OPTION_NAME);
     CommandlineOptions {
         length,
         include_lowercase,
         include_uppercase,
         include_digit,
+        include_special,
     }
 }
 
@@ -74,6 +84,9 @@ fn generation_options_for_commandline_options(options: CommandlineOptions) -> Ge
     }
     if options.include_digit {
         alphabets |= Alphabets::DIGIT;
+    }
+    if options.include_special {
+        alphabets |= Alphabets::SPECIAL;
     }
     if alphabets.is_empty() {
         alphabets = Alphabets::all();
@@ -96,6 +109,7 @@ mod must {
             include_lowercase: true,
             include_uppercase: false,
             include_digit: false,
+            include_special: false,
         };
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
@@ -110,6 +124,7 @@ mod must {
             include_lowercase: false,
             include_uppercase: true,
             include_digit: false,
+            include_special: false,
         };
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
@@ -124,6 +139,7 @@ mod must {
             include_lowercase: false,
             include_uppercase: false,
             include_digit: true,
+            include_special: false,
         };
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
@@ -132,11 +148,27 @@ mod must {
     }
 
     #[test]
+    fn support_special_chars() {
+        let commandline_options = CommandlineOptions {
+            length: 0,
+            include_lowercase: false,
+            include_uppercase: false,
+            include_digit: false,
+            include_special: true,
+        };
+
+        let generation_options = generation_options_for_commandline_options(commandline_options);
+
+        assert_eq!(generation_options.alphabets, Alphabets::SPECIAL);
+    }
+
+    #[test]
     fn default_to_all_alphabets_when_no_commandline_flags() {
         let commandline_options = CommandlineOptions {
             length: 0,
             include_lowercase: false,
             include_uppercase: false,
+            include_special: false,
             include_digit: false,
         };
 
