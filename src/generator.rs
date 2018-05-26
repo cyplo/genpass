@@ -30,25 +30,28 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
         password_correct &= any_character_matches(
             alphabets,
             Alphabets::LOWERCASE,
-            password_candidate.clone(),
+            &password_candidate,
             &|character: char| character.is_ascii_lowercase(),
         );
+        password_correct &= any_character_matches(
+            alphabets,
+            Alphabets::UPPERCASE,
+            &password_candidate,
+            &|character: char| character.is_ascii_uppercase(),
+        );
+        password_correct &= any_character_matches(
+            alphabets,
+            Alphabets::DIGIT,
+            &password_candidate,
+            &|character: char| character.is_digit(10),
+        );
+        password_correct &= any_character_matches(
+            alphabets,
+            Alphabets::SPECIAL,
+            &password_candidate,
+            &|character: char| !character.is_alphanumeric(),
+        );
 
-        if alphabets.contains(Alphabets::UPPERCASE) {
-            password_correct &= password_candidate
-                .chars()
-                .any(|character| character.is_ascii_uppercase());
-        }
-        if alphabets.contains(Alphabets::DIGIT) {
-            password_correct &= password_candidate
-                .chars()
-                .any(|character| character.is_digit(10));
-        }
-        if alphabets.contains(Alphabets::SPECIAL) {
-            password_correct &= password_candidate
-                .chars()
-                .any(|character| !character.is_alphanumeric());
-        }
         if password_correct {
             return password_candidate;
         }
@@ -58,7 +61,7 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
 fn any_character_matches(
     alphabets: Alphabets,
     alphabet: Alphabets,
-    password_candidate: String,
+    password_candidate: &str,
     character_predicate: &(Fn(char) -> bool),
 ) -> bool {
     if alphabets.contains(alphabet) {
