@@ -26,11 +26,14 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
         let password_candidate =
             generate_password_from_alphabet(options.length, rng, alphabet.clone());
         let mut password_correct = true;
-        if alphabets.contains(Alphabets::LOWERCASE) {
-            password_correct &= password_candidate
-                .chars()
-                .any(|character| character.is_ascii_lowercase());
-        }
+
+        password_correct &= any_character_matches(
+            alphabets,
+            Alphabets::LOWERCASE,
+            password_candidate.clone(),
+            &|character: char| character.is_ascii_lowercase(),
+        );
+
         if alphabets.contains(Alphabets::UPPERCASE) {
             password_correct &= password_candidate
                 .chars()
@@ -49,6 +52,22 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
         if password_correct {
             return password_candidate;
         }
+    }
+}
+
+fn any_character_matches(
+    alphabets: Alphabets,
+    alphabet: Alphabets,
+    password_candidate: String,
+    character_predicate: &(Fn(char) -> bool),
+) -> bool {
+    if alphabets.contains(alphabet) {
+        password_candidate
+            .chars()
+            .any(|character| character_predicate(character))
+    }
+    else {
+        true
     }
 }
 
