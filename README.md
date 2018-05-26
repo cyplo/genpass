@@ -22,6 +22,7 @@ FLAGS:
     -h, --help       Prints help information
     -d               Include at least one digit
     -l               Include at least one lowercase letter
+    -s               Include at least one (non alphanumeric) special character
     -u               Include at least one uppercase letter
     -V, --version    Prints version information
 
