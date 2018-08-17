@@ -3,21 +3,17 @@ language: rust
 rust:
 - stable
 
-install:
-- "./ci/install-publish-dependencies.sh"
-
 script:
+- cargo check
 - cargo test
 - cargo doc
 - cargo package
+- "./ci/cargo-install.sh"
 
 after_success:
 - "./ci/upload-coverage-data.sh"
 
-cache:
-  directories:
-    - target/kcov
-    - /home/travis/.cargo
+cache: cargo
 
 before_deploy:
 - git checkout $TRAVIS_BRANCH
@@ -42,13 +38,7 @@ deploy:
 addons:
   apt:
     packages:
-    - libcurl4-openssl-dev
-    - libelf-dev
-    - libdw-dev
-    - cmake
-    - gcc
-    - binutils-dev
-    - libiberty-dev
+      - libssl-dev
 
 env:
   global:
