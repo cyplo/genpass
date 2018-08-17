@@ -3,15 +3,14 @@ language: rust
 rust:
 - stable
 
-install:
-- "./ci/install-publish-dependencies.sh"
-
 script:
+- cargo check
 - cargo test
 - cargo doc
 - cargo package
 
 after_success:
+- "./ci/install-publish-dependencies.sh"
 - "./ci/upload-coverage-data.sh"
 
 cache: cargo
