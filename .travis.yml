@@ -8,6 +8,7 @@ script:
 - cargo test
 - cargo doc
 - "./ci/cargo-install.sh"
+- cargo tarpaulin --out Xml
 - cargo package
 
 after_success:
