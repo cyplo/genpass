@@ -34,7 +34,6 @@ ARGS:
 
 TODOs to get `genpass` to 1.0
 
-* [support special characters](https://github.com/cyplo/genpass/issues/3). 
 * [support custom sets of characters](https://github.com/cyplo/genpass/issues/4)
 * [add benchmarks](https://github.com/cyplo/genpass/issues/5)
 * [test entropy of generated passwords](https://github.com/cyplo/genpass/issues/6)
