@@ -9,6 +9,7 @@ script:
 - cargo doc
 - cargo package
 - "./ci/cargo-install.sh"
+- cargo release --no-dev-version --no-confirm --tag-prefix v --dry-run patch
 
 after_success:
 - "./ci/upload-coverage-data.sh"
