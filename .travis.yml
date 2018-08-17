@@ -8,8 +8,7 @@ script:
 - cargo test
 - cargo doc
 - cargo package
-- cargo install cargo-release
-- RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
+- "./ci/cargo-install.sh"
 
 after_success:
 - "./ci/upload-coverage-data.sh"
