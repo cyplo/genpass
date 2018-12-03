@@ -2,4 +2,5 @@
 set -e
 
 cargo install --force cargo-release
-RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install --force cargo-tarpaulin
+rustup install nightly
+RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo +nightly install --force cargo-tarpaulin
