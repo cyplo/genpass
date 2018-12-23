@@ -144,8 +144,6 @@ mod must {
         options: GenerationOptions,
         predicate: &Fn(char) -> bool,
     ) -> Result<(), TestCaseError> {
-        prop_assume!(seed.len() == 32);
-
         let mut rng: StdRng = SeedableRng::from_seed(seed);
         let password = generate_password(options, &mut rng);
 
