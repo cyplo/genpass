@@ -10,7 +10,7 @@ script:
 - cargo check
 - cargo test
 - cargo doc
-- cargo tarpaulin --out Xml
+- cargo +nightly tarpaulin --out Xml
 - cargo package
 
 after_success:
