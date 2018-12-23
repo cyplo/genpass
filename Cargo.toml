@@ -13,7 +13,6 @@ maintenance = { status = "passively-maintained" }
 is-it-maintained-issue-resolution = { repository = "cyplo/genpass" }
 is-it-maintained-open-issues = { repository = "cyplo/genpass" }
 travis-ci = { repository = "cyplo/genpass", branch = "master" }
-codecov = { repository = "cyplo/genpass", branch = "master", service = "github" }
 
 [dependencies]
 bitflags = "1.0"
