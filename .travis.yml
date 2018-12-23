@@ -4,11 +4,13 @@ rust:
 - stable
 
 script:
+- "./ci/install.sh"
+- cargo fmt -- --check
+- cargo clippy
 - cargo check
 - cargo test
 - cargo doc
-- "./ci/cargo-install.sh"
-- cargo tarpaulin --out Xml
+- cargo +nightly tarpaulin --out Xml
 - cargo package
 
 after_success:

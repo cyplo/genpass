@@ -1,5 +1,5 @@
-use alphabet::Alphabets;
 use alphabet::generate_alphabet;
+use alphabet::Alphabets;
 use rand;
 
 const MINIMUM_PASSWORD_LENGTH: usize = 4;
@@ -24,7 +24,7 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
 
     loop {
         let password_candidate =
-            generate_password_from_alphabet(options.length, rng, alphabet.clone());
+            generate_password_from_alphabet(options.length, rng, alphabet.as_slice());
         let mut password_correct = true;
         if alphabets.contains(Alphabets::LOWERCASE) {
             password_correct &= password_candidate
@@ -55,7 +55,7 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
 fn generate_password_from_alphabet<Rng: rand::Rng>(
     length: usize,
     rng: &mut Rng,
-    alphabet: Vec<char>,
+    alphabet: &[char],
 ) -> String {
     let mut password = String::with_capacity(length);
     while password.len() < length {
@@ -71,9 +71,9 @@ mod must {
     use super::*;
 
     use quickcheck::TestResult;
+    use rand::os::OsRng;
     use rand::SeedableRng;
     use rand::StdRng;
-    use rand::os::OsRng;
 
     #[test]
     #[should_panic]
@@ -137,7 +137,8 @@ mod must {
         options: GenerationOptions,
         predicate: &Fn(char) -> bool,
     ) -> TestResult {
-        if options.length < MINIMUM_PASSWORD_LENGTH || options.length > MINIMUM_PASSWORD_LENGTH * 2
+        if options.length < MINIMUM_PASSWORD_LENGTH
+            || options.length > MINIMUM_PASSWORD_LENGTH * 2
             || seed.len() == 0
         {
             return TestResult::discard();

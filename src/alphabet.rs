@@ -13,10 +13,10 @@ impl Default for Alphabets {
     }
 }
 
-const LOWERCASE_CHARS: &'static str = "abcdefghijklmnopqrstuvwxyz";
-const UPPERCASE_CHARS: &'static str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const DIGITS_CHARS: &'static str = "1234567890";
-const SPECIAL_CHARS: &'static str = "~!@#$%^&*()-=_+{}[]|\';/.,?><";
+const LOWERCASE_CHARS: &str = "abcdefghijklmnopqrstuvwxyz";
+const UPPERCASE_CHARS: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const DIGITS_CHARS: &str = "1234567890";
+const SPECIAL_CHARS: &str = "~!@#$%^&*()-=_+{}[]|\';/.,?><";
 
 pub fn generate_alphabet(subalphabets: Alphabets) -> Vec<char> {
     let mut resulting_alphabet = Vec::new();
@@ -45,16 +45,12 @@ mod must {
     fn have_all_different_cases_of_letters() {
         assert!(LOWERCASE_CHARS.eq_ignore_ascii_case(UPPERCASE_CHARS));
         let alphabet = generate_alphabet(Alphabets::all());
-        assert!(
-            alphabet
-                .iter()
-                .any(|character| character.is_ascii_lowercase())
-        );
-        assert!(
-            alphabet
-                .iter()
-                .any(|character| character.is_ascii_uppercase())
-        );
+        assert!(alphabet
+            .iter()
+            .any(|character| character.is_ascii_lowercase()));
+        assert!(alphabet
+            .iter()
+            .any(|character| character.is_ascii_uppercase()));
     }
 
     #[test]
@@ -65,11 +61,9 @@ mod must {
             .filter(|code| char::from(*code).is_ascii_alphanumeric())
             .map(|code| char::from(code))
             .collect();
-        assert!(
-            all_alphanumeric_characters
-                .iter()
-                .all(|character| alphabet.contains(character))
-        );
+        assert!(all_alphanumeric_characters
+            .iter()
+            .all(|character| alphabet.contains(character)));
     }
 
     #[test]
@@ -81,21 +75,17 @@ mod must {
     #[test]
     fn not_have_control_codes() {
         let alphabet = generate_alphabet(Alphabets::all());
-        assert!(
-            alphabet
-                .iter()
-                .all(|character| !character.is_ascii_control())
-        );
+        assert!(alphabet
+            .iter()
+            .all(|character| !character.is_ascii_control()));
     }
 
     #[test]
     fn have_special_chars() {
         let alphabet = generate_alphabet(Alphabets::SPECIAL);
-        assert!(
-            alphabet
-                .iter()
-                .all(|character| !character.is_alphanumeric())
-        );
+        assert!(alphabet
+            .iter()
+            .all(|character| !character.is_alphanumeric()));
     }
 
 }

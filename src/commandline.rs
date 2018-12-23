@@ -2,12 +2,12 @@ use alphabet::Alphabets;
 use clap::{App, Arg, ArgMatches};
 use generator::GenerationOptions;
 
-const LENGTH_OPTION_NAME: &'static str = "length";
-const INCLUDE_LOWERCASE_OPTION_NAME: &'static str = "include-lowercase";
-const INCLUDE_UPPERCASE_OPTION_NAME: &'static str = "include-uppercase";
-const INCLUDE_DIGIT_OPTION_NAME: &'static str = "include-digit";
-const INCLUDE_SPECIAL_OPTION_NAME: &'static str = "include-special";
-const DEFAULT_LENGTH: &'static str = "32";
+const LENGTH_OPTION_NAME: &str = "length";
+const INCLUDE_LOWERCASE_OPTION_NAME: &str = "include-lowercase";
+const INCLUDE_UPPERCASE_OPTION_NAME: &str = "include-uppercase";
+const INCLUDE_DIGIT_OPTION_NAME: &str = "include-digit";
+const INCLUDE_SPECIAL_OPTION_NAME: &str = "include-special";
+const DEFAULT_LENGTH: &str = "32";
 
 pub fn get_generation_options() -> GenerationOptions {
     let matches = App::new("genpass")
@@ -42,7 +42,7 @@ pub fn get_generation_options() -> GenerationOptions {
                 .takes_value(false),
         )
         .get_matches();
-    let commandline_options = commandline_options_for_matches(matches);
+    let commandline_options = commandline_options_for_matches(&matches);
     generation_options_for_commandline_options(commandline_options)
 }
 
@@ -55,7 +55,7 @@ struct CommandlineOptions {
     include_special: bool,
 }
 
-fn commandline_options_for_matches(matches: ArgMatches) -> CommandlineOptions {
+fn commandline_options_for_matches(matches: &ArgMatches) -> CommandlineOptions {
     let length = matches
         .value_of(LENGTH_OPTION_NAME)
         .unwrap()
