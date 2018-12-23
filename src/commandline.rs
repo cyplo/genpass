@@ -2,20 +2,21 @@ use crate::alphabet::Alphabets;
 use crate::generator::GenerationOptions;
 use clap::{App, Arg, ArgMatches};
 
+pub const DEFAULT_LENGTH: usize = 32;
 const LENGTH_OPTION_NAME: &str = "length";
 const INCLUDE_LOWERCASE_OPTION_NAME: &str = "include-lowercase";
 const INCLUDE_UPPERCASE_OPTION_NAME: &str = "include-uppercase";
 const INCLUDE_DIGIT_OPTION_NAME: &str = "include-digit";
 const INCLUDE_SPECIAL_OPTION_NAME: &str = "include-special";
-const DEFAULT_LENGTH: &str = "32";
 
 pub fn get_generation_options() -> GenerationOptions {
+    let default_length_text = DEFAULT_LENGTH.to_string();
     let matches = App::new("genpass")
         .arg(
             Arg::with_name(LENGTH_OPTION_NAME)
                 .short("l")
                 .index(1)
-                .default_value(DEFAULT_LENGTH),
+                .default_value(&default_length_text),
         )
         .arg(
             Arg::with_name(INCLUDE_LOWERCASE_OPTION_NAME)

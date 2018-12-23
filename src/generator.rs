@@ -71,6 +71,7 @@ mod must {
     use super::*;
     use proptest::prelude::*;
     use proptest::*;
+    use zxcvbn::zxcvbn;
 
     use rand::rngs::OsRng;
     use rand::rngs::StdRng;
@@ -136,6 +137,19 @@ mod must {
                 GenerationOptions { length, alphabets: Alphabets::all() },
                 &|character| character.is_alphanumeric()
             )?
+        }
+
+        #[test]
+        fn generate_good_passwords_by_default(seed in any::<[u8;32]>()) {
+            let mut rng: StdRng = SeedableRng::from_seed(seed);
+            let length = crate::commandline::DEFAULT_LENGTH;
+            // TODO: use same generation options as the program defaults to
+            let options = GenerationOptions { length, alphabets: Alphabets::all() };
+
+            let password = generate_password(options, &mut rng);
+            let estimate = zxcvbn(&password, &[]).unwrap();
+
+            prop_assert_eq!(estimate.score, 4);
         }
     }
 
