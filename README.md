@@ -1,12 +1,14 @@
 # genpass [![Build Status](https://travis-ci.org/cyplo/genpass.svg?branch=master)](https://travis-ci.org/cyplo/genpass)
 
-A simple yet robust commandline random password generator.  
+A simple yet robust commandline random password generator.
 
-Multiplatform (Linux, Mac, Windows).  
+Multiplatform (Linux, Mac, Windows).
 Fast.
 
+Has extensive generative test suite, including tests against a [Rust port](https://crates.io/crates/zxcvbn) of Dropbox's password strength tester [`zxcvbn`](https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/wheeler)
+
 ## Installation
-On a system with [Rust](https://www.rust-lang.org/en-US/) installed: 
+On a system with [Rust](https://www.rust-lang.org/en-US/) installed:
 ```
 $ cargo install genpass
 ```
@@ -36,8 +38,7 @@ TODOs to get `genpass` to 1.0
 
 * [support custom sets of characters](https://github.com/cyplo/genpass/issues/4)
 * [add benchmarks](https://github.com/cyplo/genpass/issues/5)
-* [test entropy of generated passwords](https://github.com/cyplo/genpass/issues/6)
 
 ## Contributing
-All contributions welcome !  
+All contributions welcome !
 Ideally - start a discussion with an issue first before contributing a PR.
