@@ -6,6 +6,7 @@ description = "A simple yet robust commandline random password generator."
 repository = "https://github.com/cyplo/genpass"
 license = "AGPL-3.0"
 readme = "README.md"
+edition = "2018"
 
 [badges]
 maintenance = { status = "passively-maintained" }
@@ -16,9 +17,8 @@ codecov = { repository = "cyplo/genpass", branch = "master", service = "github" 
 
 [dependencies]
 bitflags = "1.0"
-rand = "0.4"
+rand = "0.6"
 clap = "2"
 
 [dev-dependencies]
-quickcheck = "0.7"
-
+proptest = "0.8"
