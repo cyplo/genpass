@@ -1,6 +1,6 @@
-use alphabet::Alphabets;
+use crate::alphabet::Alphabets;
+use crate::generator::GenerationOptions;
 use clap::{App, Arg, ArgMatches};
-use generator::GenerationOptions;
 
 const LENGTH_OPTION_NAME: &str = "length";
 const INCLUDE_LOWERCASE_OPTION_NAME: &str = "include-lowercase";

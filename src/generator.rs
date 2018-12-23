@@ -1,5 +1,5 @@
-use alphabet::generate_alphabet;
-use alphabet::Alphabets;
+use crate::alphabet::generate_alphabet;
+use crate::alphabet::Alphabets;
 use rand;
 
 const MINIMUM_PASSWORD_LENGTH: usize = 4;
@@ -69,11 +69,17 @@ fn generate_password_from_alphabet<Rng: rand::Rng>(
 #[cfg(test)]
 mod must {
     use super::*;
+    use proptest::prelude::*;
+    use proptest::*;
 
-    use quickcheck::TestResult;
-    use rand::os::OsRng;
+    use rand::rngs::OsRng;
+    use rand::rngs::StdRng;
     use rand::SeedableRng;
-    use rand::StdRng;
+    use std::ops::Range;
+
+    const MAXIMUM_TESTABLE_PASSWORD_LENGTH: usize = MINIMUM_PASSWORD_LENGTH * 8;
+    const TESTABLE_PASSWORD_RANGE: Range<usize> =
+        MINIMUM_PASSWORD_LENGTH..MAXIMUM_TESTABLE_PASSWORD_LENGTH;
 
     #[test]
     #[should_panic]
@@ -88,70 +94,60 @@ mod must {
         );
     }
 
-    quickcheck! {
-
-        fn generate_password_of_given_length(length: usize) -> TestResult {
-          if length < MINIMUM_PASSWORD_LENGTH {
-            return TestResult::discard();
-          }
-          let mut rng = OsRng::new().unwrap();
-          let password = generate_password(
-            GenerationOptions{ length, alphabets: Alphabets::all()},
-            &mut rng);
-          TestResult::from_bool(password.len() == length)
+    proptest! {
+        #[test]
+        fn generate_password_of_given_length(length in TESTABLE_PASSWORD_RANGE) {
+            let mut rng = OsRng::new().unwrap();
+            let password = generate_password(GenerationOptions{ length, alphabets: Alphabets::all()}, &mut rng);
+            prop_assert_eq!(password.len(), length)
         }
 
-        fn support_lowercase_letters(length: usize, seed: Vec<usize>) -> TestResult {
-          test_generated_password_characters(
-            seed,
-            GenerationOptions { length, alphabets: Alphabets::all() },
-            &|character| character.is_ascii_lowercase() )
-        }
-
-        fn support_uppercase_letters(length: usize, seed: Vec<usize>) -> TestResult {
-          test_generated_password_characters(
-            seed,
-            GenerationOptions { length, alphabets: Alphabets::all() },
-            &|character| character.is_ascii_uppercase() )
-        }
-
-        fn support_digits(length: usize, seed: Vec<usize>) -> TestResult {
-          test_generated_password_characters(
-            seed,
-            GenerationOptions { length, alphabets: Alphabets::all()},
-            &|character| character.is_digit(10) )
-        }
-
-        fn support_special_chars(length: usize, seed: Vec<usize>) -> TestResult {
+        #[test]
+        fn support_lowercase_letters(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
             test_generated_password_characters(
                 seed,
-                GenerationOptions { length, alphabets: Alphabets::all()},
-                &|character| character.is_alphanumeric() )
+                GenerationOptions { length, alphabets: Alphabets::all() },
+                &|character| character.is_ascii_lowercase()
+            )?
         }
 
+        #[test]
+        fn support_uppercase_letters(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
+            test_generated_password_characters(
+                seed,
+                GenerationOptions { length, alphabets: Alphabets::all() },
+                &|character| character.is_ascii_uppercase()
+            )?
+        }
 
+        #[test]
+        fn support_digits(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
+            test_generated_password_characters(
+                seed,
+                GenerationOptions { length, alphabets: Alphabets::all() },
+                &|character| character.is_digit(10)
+            )?
+        }
+
+        #[test]
+        fn support_special_chars(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
+            test_generated_password_characters(
+                seed,
+                GenerationOptions { length, alphabets: Alphabets::all() },
+                &|character| character.is_alphanumeric()
+            )?
+        }
     }
 
     fn test_generated_password_characters(
-        seed: Vec<usize>,
+        seed: [u8; 32],
         options: GenerationOptions,
         predicate: &Fn(char) -> bool,
-    ) -> TestResult {
-        if options.length < MINIMUM_PASSWORD_LENGTH
-            || options.length > MINIMUM_PASSWORD_LENGTH * 2
-            || seed.len() == 0
-        {
-            return TestResult::discard();
-        }
-
-        let mut rng: StdRng = SeedableRng::from_seed(seed.as_slice());
+    ) -> Result<(), TestCaseError> {
+        let mut rng: StdRng = SeedableRng::from_seed(seed);
         let password = generate_password(options, &mut rng);
 
-        let has_any = password.chars().any(predicate);
-        if !has_any {
-            eprintln!("Failing password: {}", password);
-        }
-
-        TestResult::from_bool(has_any)
+        prop_assert!(password.chars().any(predicate));
+        Ok(())
     }
 }

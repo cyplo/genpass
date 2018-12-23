@@ -10,11 +10,7 @@ script:
 - cargo check
 - cargo test
 - cargo doc
-- cargo +nightly tarpaulin --out Xml
 - cargo package
-
-after_success:
-- "./ci/upload-coverage-data.sh"
 
 cache: cargo
 

@@ -1,3 +1,5 @@
+use bitflags::bitflags;
+
 bitflags! {
     pub struct Alphabets:u8 {
         const LOWERCASE = 0b0001;

@@ -1,22 +1,11 @@
-#[cfg(test)]
-#[macro_use]
-extern crate quickcheck;
-
-extern crate rand;
-use rand::os::OsRng;
-
-#[macro_use]
-extern crate bitflags;
-
-extern crate clap;
-
-mod commandline;
-use commandline::get_generation_options;
+use rand::rngs::OsRng;
 
 mod alphabet;
-
+mod commandline;
 mod generator;
-use generator::generate_password;
+
+use crate::commandline::get_generation_options;
+use crate::generator::generate_password;
 
 fn main() {
     let generation_options = get_generation_options();
