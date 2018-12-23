@@ -4,8 +4,6 @@ set -e
 rustup install nightly
 
 (test -x "${HOME}/.cargo/bin/cargo-release" || cargo install cargo-release)
-(test -x "${HOME}/.cargo/bin/cargo-tarpaulin" || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo +nightly install cargo-tarpaulin)
-
 (test -x "${HOME}/.cargo/bin/cargo-install-update" || cargo install cargo-update)
 
 set +e
