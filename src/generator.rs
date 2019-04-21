@@ -140,6 +140,7 @@ mod must {
         }
 
         #[test]
+        #[ignore]
         fn generate_good_passwords_by_default(seed in any::<[u8;32]>()) {
             let mut rng: StdRng = SeedableRng::from_seed(seed);
             let length = crate::commandline::DEFAULT_LENGTH;
