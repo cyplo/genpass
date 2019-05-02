@@ -23,33 +23,36 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
     }
 
     loop {
-        let password_candidate =
-            generate_password_from_alphabet(options.length, rng, alphabet.as_slice());
-        let mut password_correct = true;
-        if alphabets.contains(Alphabets::LOWERCASE) {
-            password_correct &= password_candidate
-                .chars()
-                .any(|character| character.is_ascii_lowercase());
-        }
-        if alphabets.contains(Alphabets::UPPERCASE) {
-            password_correct &= password_candidate
-                .chars()
-                .any(|character| character.is_ascii_uppercase());
-        }
-        if alphabets.contains(Alphabets::DIGIT) {
-            password_correct &= password_candidate
-                .chars()
-                .any(|character| character.is_digit(10));
-        }
-        if alphabets.contains(Alphabets::SPECIAL) {
-            password_correct &= password_candidate
-                .chars()
-                .any(|character| !character.is_alphanumeric());
-        }
-        if password_correct {
+        let password_candidate = generate_password_from_alphabet(options.length, rng, alphabet.as_slice());
+        if meets_criteria(alphabets, &password_candidate) {
             return password_candidate;
         }
     }
+}
+
+fn meets_criteria(alphabets: Alphabets, password_candidate: &String) -> bool {
+    let mut meets_criteria = true;
+    if alphabets.contains(Alphabets::LOWERCASE) {
+        meets_criteria &= password_candidate
+            .chars()
+            .any(|character| character.is_ascii_lowercase());
+    }
+    if alphabets.contains(Alphabets::UPPERCASE) {
+        meets_criteria &= password_candidate
+            .chars()
+            .any(|character| character.is_ascii_uppercase());
+    }
+    if alphabets.contains(Alphabets::DIGIT) {
+        meets_criteria &= password_candidate
+            .chars()
+            .any(|character| character.is_digit(10));
+    }
+    if alphabets.contains(Alphabets::SPECIAL) {
+        meets_criteria &= password_candidate
+            .chars()
+            .any(|character| !character.is_alphanumeric());
+    }
+    meets_criteria
 }
 
 fn generate_password_from_alphabet<Rng: rand::Rng>(
