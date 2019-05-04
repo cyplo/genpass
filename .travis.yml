@@ -4,13 +4,10 @@ rust:
 - stable
 
 script:
-- "./ci/install.sh"
-- cargo fmt -- --check
-- cargo clippy
-- cargo check
-- cargo test -- --ignored
-- cargo doc
-- cargo package
+- set -e
+- "./scripts/install.sh"
+- "./scripts/test.sh"
+- "./scripts/package.sh"
 
 cache: cargo
 

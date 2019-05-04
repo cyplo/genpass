@@ -1,180 +1,169 @@
 use crate::alphabet::Alphabets;
-use crate::generator::GenerationOptions;
-use clap::{App, Arg, ArgMatches};
+use crate::generator::{GenerationOptions, Source};
+use structopt::StructOpt;
 
-pub const DEFAULT_LENGTH: usize = 32;
-const LENGTH_OPTION_NAME: &str = "length";
-const INCLUDE_LOWERCASE_OPTION_NAME: &str = "include-lowercase";
-const INCLUDE_UPPERCASE_OPTION_NAME: &str = "include-uppercase";
-const INCLUDE_DIGIT_OPTION_NAME: &str = "include-digit";
-const INCLUDE_SPECIAL_OPTION_NAME: &str = "include-special";
+#[derive(Copy, Clone, StructOpt, Debug)]
+#[structopt(name = "genpass")]
+pub struct CommandlineOptions {
+    #[structopt(long = "version")]
+    pub print_version: bool,
 
-pub fn get_generation_options() -> GenerationOptions {
-    let default_length_text = DEFAULT_LENGTH.to_string();
-    let matches = App::new("genpass")
-        .arg(
-            Arg::with_name(LENGTH_OPTION_NAME)
-                .short("l")
-                .index(1)
-                .default_value(&default_length_text),
-        )
-        .arg(
-            Arg::with_name(INCLUDE_LOWERCASE_OPTION_NAME)
-                .short("l")
-                .help("Include at least one lowercase letter")
-                .takes_value(false),
-        )
-        .arg(
-            Arg::with_name(INCLUDE_UPPERCASE_OPTION_NAME)
-                .short("u")
-                .help("Include at least one uppercase letter")
-                .takes_value(false),
-        )
-        .arg(
-            Arg::with_name(INCLUDE_DIGIT_OPTION_NAME)
-                .short("d")
-                .help("Include at least one digit")
-                .takes_value(false),
-        )
-        .arg(
-            Arg::with_name(INCLUDE_SPECIAL_OPTION_NAME)
-                .short("s")
-                .help("Include at least one (non alphanumeric) special character")
-                .takes_value(false),
-        )
-        .get_matches();
-    let commandline_options = commandline_options_for_matches(&matches);
-    generation_options_for_commandline_options(commandline_options)
-}
+    #[structopt(
+        long = "length",
+        help = "The length of the password to generate",
+        default_value = "32",
+        index = 1
+    )]
+    pub length: usize,
 
-#[derive(Copy, Clone)]
-struct CommandlineOptions {
-    length: usize,
+    #[structopt(
+        long = "passphrase",
+        help = "Create a passphrase of (at least) the given length instead of a password."
+    )]
+    passphrase: bool,
+
+    #[structopt(
+        short = "l",
+        long = "include-lowercase",
+        help = "Include at least one lowercase letter",
+        conflicts_with = "passphrase"
+    )]
     include_lowercase: bool,
+    #[structopt(
+        short = "u",
+        long = "include-uppercase",
+        help = "Include at least one uppercase letter",
+        conflicts_with = "passphrase"
+    )]
     include_uppercase: bool,
+    #[structopt(
+        short = "d",
+        long = "include-digit",
+        help = "Include at least one digit",
+        conflicts_with = "passphrase"
+    )]
     include_digit: bool,
+    #[structopt(
+        short = "s",
+        long = "include-special",
+        help = "Include at least one special (non-alphanumeric) character",
+        conflicts_with = "passphrase"
+    )]
     include_special: bool,
 }
 
-fn commandline_options_for_matches(matches: &ArgMatches) -> CommandlineOptions {
-    let length = matches
-        .value_of(LENGTH_OPTION_NAME)
-        .unwrap()
-        .parse::<usize>()
-        .unwrap();
-    let include_lowercase = matches.is_present(INCLUDE_LOWERCASE_OPTION_NAME);
-    let include_uppercase = matches.is_present(INCLUDE_UPPERCASE_OPTION_NAME);
-    let include_digit = matches.is_present(INCLUDE_DIGIT_OPTION_NAME);
-    let include_special = matches.is_present(INCLUDE_SPECIAL_OPTION_NAME);
-    CommandlineOptions {
-        length,
-        include_lowercase,
-        include_uppercase,
-        include_digit,
-        include_special,
+pub fn generation_options_for_commandline_options(
+    options: CommandlineOptions,
+) -> GenerationOptions {
+    let source = if options.passphrase {
+        Source::Words
+    } else {
+        let mut alphabets = Alphabets::empty();
+        if options.include_lowercase {
+            alphabets |= Alphabets::LOWERCASE;
+        }
+        if options.include_uppercase {
+            alphabets |= Alphabets::UPPERCASE;
+        }
+        if options.include_digit {
+            alphabets |= Alphabets::DIGIT;
+        }
+        if options.include_special {
+            alphabets |= Alphabets::SPECIAL;
+        }
+        if alphabets.is_empty() {
+            alphabets = Alphabets::all();
+        }
+        Source::Alphabets(alphabets)
+    };
+    GenerationOptions {
+        length: options.length,
+        source,
     }
 }
 
-fn generation_options_for_commandline_options(options: CommandlineOptions) -> GenerationOptions {
-    let mut alphabets = Alphabets::empty();
-    if options.include_lowercase {
-        alphabets |= Alphabets::LOWERCASE;
-    }
-    if options.include_uppercase {
-        alphabets |= Alphabets::UPPERCASE;
-    }
-    if options.include_digit {
-        alphabets |= Alphabets::DIGIT;
-    }
-    if options.include_special {
-        alphabets |= Alphabets::SPECIAL;
-    }
-    if alphabets.is_empty() {
-        alphabets = Alphabets::all();
-    }
-    GenerationOptions {
-        length: options.length,
-        alphabets,
+#[cfg(test)]
+pub mod test {
+    use super::*;
+
+    pub fn default_commandline_options() -> CommandlineOptions {
+        let empty_args: [String; 0] = [];
+        CommandlineOptions::from_iter(&empty_args)
     }
 }
 
 #[cfg(test)]
 mod must {
 
+    use super::test::*;
     use super::*;
+    use crate::generator::Source::Words;
 
     #[test]
     fn support_lowercase_letters() {
-        let commandline_options = CommandlineOptions {
-            length: 0,
-            include_lowercase: true,
-            include_uppercase: false,
-            include_digit: false,
-            include_special: false,
-        };
+        let mut commandline_options = default_commandline_options();
+        commandline_options.include_lowercase = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert_eq!(generation_options.alphabets, Alphabets::LOWERCASE);
+        assert_is_subalphabet(generation_options.source, Alphabets::LOWERCASE);
     }
 
     #[test]
     fn support_uppercase_letters() {
-        let commandline_options = CommandlineOptions {
-            length: 0,
-            include_lowercase: false,
-            include_uppercase: true,
-            include_digit: false,
-            include_special: false,
-        };
+        let mut commandline_options = default_commandline_options();
+        commandline_options.include_uppercase = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert_eq!(generation_options.alphabets, Alphabets::UPPERCASE);
+        assert_is_subalphabet(generation_options.source, Alphabets::UPPERCASE);
     }
 
     #[test]
     fn support_digits() {
-        let commandline_options = CommandlineOptions {
-            length: 0,
-            include_lowercase: false,
-            include_uppercase: false,
-            include_digit: true,
-            include_special: false,
-        };
+        let mut commandline_options = default_commandline_options();
+        commandline_options.include_digit = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert_eq!(generation_options.alphabets, Alphabets::DIGIT);
+        assert_is_subalphabet(generation_options.source, Alphabets::DIGIT);
     }
 
     #[test]
     fn support_special_chars() {
-        let commandline_options = CommandlineOptions {
-            length: 0,
-            include_lowercase: false,
-            include_uppercase: false,
-            include_digit: false,
-            include_special: true,
-        };
+        let mut commandline_options = default_commandline_options();
+        commandline_options.include_special = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert_eq!(generation_options.alphabets, Alphabets::SPECIAL);
+        assert_is_subalphabet(generation_options.source, Alphabets::SPECIAL);
     }
 
     #[test]
-    fn default_to_all_alphabets_when_no_commandline_flags() {
-        let commandline_options = CommandlineOptions {
-            length: 0,
-            include_lowercase: false,
-            include_uppercase: false,
-            include_special: false,
-            include_digit: false,
-        };
+    fn support_passphrases() {
+        let mut commandline_options = default_commandline_options();
+        commandline_options.passphrase = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert!(generation_options.alphabets.is_all());
+        assert_eq!(generation_options.source, Words);
+    }
+
+    #[test]
+    fn default_to_all_alphabets_with_default_commandline_flags() {
+        let commandline_options = default_commandline_options();
+
+        let generation_options = generation_options_for_commandline_options(commandline_options);
+
+        assert_is_subalphabet(generation_options.source, Alphabets::all());
+    }
+
+    fn assert_is_subalphabet(actual: Source, expected: Alphabets) {
+        match actual {
+            Source::Alphabets(alphabets) => {
+                assert_eq!(alphabets, expected);
+            }
+            Source::Words => panic!("Not an alphabet"),
+        }
     }
 }
