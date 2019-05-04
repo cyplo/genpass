@@ -17,17 +17,17 @@ pub struct GenerationOptions {
 }
 
 pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut Rng) -> String {
+    let length = options.length;
+    if length < MINIMUM_PASSWORD_LENGTH {
+        panic!(
+            "Given the generation options, the length of {} is too short",
+            length
+        );
+    }
+
     match options.source {
         Source::Alphabets(alphabets) => {
-            let length = options.length;
             let alphabet = generate_alphabet(alphabets);
-
-            if length < MINIMUM_PASSWORD_LENGTH {
-                panic!(
-                    "Cannot generate password of length {} given the required criteria",
-                    length
-                );
-            }
 
             loop {
                 let password_candidate =
@@ -39,6 +39,20 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
         }
         Source::Words(_) => "".to_owned(),
     }
+}
+
+fn generate_password_from_alphabet<Rng: rand::Rng>(
+    length: usize,
+    rng: &mut Rng,
+    alphabet: &[char],
+) -> String {
+    let mut password = String::with_capacity(length);
+    while password.len() < length {
+        let next_character_index = rng.next_u32() as usize % alphabet.len();
+        let next_character = alphabet[next_character_index];
+        password.push(next_character);
+    }
+    password
 }
 
 fn meets_criteria(alphabets: Alphabets, password_candidate: &String) -> bool {
@@ -64,20 +78,6 @@ fn meets_criteria(alphabets: Alphabets, password_candidate: &String) -> bool {
             .any(|character| !character.is_alphanumeric());
     }
     meets_criteria
-}
-
-fn generate_password_from_alphabet<Rng: rand::Rng>(
-    length: usize,
-    rng: &mut Rng,
-    alphabet: &[char],
-) -> String {
-    let mut password = String::with_capacity(length);
-    while password.len() < length {
-        let next_character_index = rng.next_u32() as usize % alphabet.len();
-        let next_character = alphabet[next_character_index];
-        password.push(next_character);
-    }
-    password
 }
 
 #[cfg(test)]
