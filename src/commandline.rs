@@ -11,7 +11,8 @@ pub struct CommandlineOptions {
     #[structopt(
         long = "length",
         help = "The length of the password to generate",
-        default_value = "32"
+        default_value = "32",
+        index = 1
     )]
     pub length: usize,
 

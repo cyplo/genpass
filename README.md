@@ -9,7 +9,15 @@ You can use it generate keys or passwords in scripts or use it as your primary d
 
 Has extensive generative test suite, including tests against a [Rust port](https://crates.io/crates/zxcvbn) of Dropbox's password strength tester [`zxcvbn`](https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/wheeler)
 
-## Generating a passoword directly into your system cliboard
+## Typical usage
+```
+genpass                  # use defaults, they're good
+genpass 2048             # generate long password, can be used as a key
+genpass --passphrase 128 # generate longer passphrase
+genpass -dlu             # no special characters
+```
+
+### Generating a password directly into your system cliboard
 
 On a Mac:
 ```
@@ -19,6 +27,7 @@ On Linux:
 ```
 genpass | xclip -selection clipboard
 ```
+
 
 ## Installation
 On a system with [Rust](https://www.rust-lang.org/en-US/) installed:
