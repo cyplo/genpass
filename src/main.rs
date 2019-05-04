@@ -8,7 +8,7 @@ mod built_info {
 mod commandline;
 mod generator;
 
-use crate::generator::generate_password;
+use crate::generator::generate;
 use structopt::StructOpt;
 
 fn main() {
@@ -28,5 +28,5 @@ fn main() {
 
     let mut rng = OsRng::new().expect("Error opening OS random number generator");
     let generation_options = commandline::generation_options_for_commandline_options(options);
-    println!("{}", generate_password(generation_options, &mut rng));
+    println!("{}", generate(generation_options, &mut rng));
 }

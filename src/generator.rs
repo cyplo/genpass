@@ -1,5 +1,6 @@
 use crate::alphabet::generate_alphabet;
 use crate::alphabet::Alphabets;
+
 use rand;
 
 const MINIMUM_PASSWORD_LENGTH: usize = 4;
@@ -16,7 +17,7 @@ pub struct GenerationOptions {
     pub source: Source,
 }
 
-pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut Rng) -> String {
+pub fn generate<Rng: rand::Rng>(options: GenerationOptions, rng: &mut Rng) -> String {
     let length = options.length;
     if length < MINIMUM_PASSWORD_LENGTH {
         panic!(
@@ -31,13 +32,22 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
 
             loop {
                 let password_candidate =
-                    generate_password_from_alphabet(options.length, rng, alphabet.as_slice());
+                    generate_password_from_alphabet(options.length, rng, &alphabet);
                 if meets_criteria(alphabets, &password_candidate) {
                     return password_candidate;
                 }
             }
         }
-        Source::Words => "".to_owned(),
+        Source::Words => {
+            let mut passphrase = String::with_capacity(length);
+            loop {
+                passphrase.push_str(eff_wordlist::large::random_word());
+                if passphrase.len() >= length {
+                    return passphrase;
+                }
+                passphrase.push(' ');
+            }
+        }
     }
 }
 
@@ -101,7 +111,7 @@ mod must {
     #[should_panic]
     fn refuse_to_generate_too_short_of_a_password() {
         let mut rng = OsRng::new().unwrap();
-        generate_password(
+        generate(
             GenerationOptions {
                 length: MINIMUM_PASSWORD_LENGTH - 1,
                 source: Source::Alphabets(Alphabets::all()),
@@ -116,6 +126,44 @@ mod must {
             let password = generate_password_from_all_alphabets(length, seed);
 
             prop_assert_eq!(password.len(), length)
+        }
+
+        #[test]
+        fn generate_passphrase_of_given_length_or_longer(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
+            let passphrase = generate_passphrase(length, seed);
+
+            prop_assert!(passphrase.len() >= length)
+        }
+    }
+
+    proptest! {
+        #[test]
+        fn generate_passphrase_with_separator(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
+            let (_, longest_word) = eff_wordlist::large::LIST.iter().
+                max_by(|(_,first_word), (_,second_word)| first_word.len().cmp(&second_word.len())).unwrap();
+            prop_assume!(length > longest_word.len() + 1);
+
+            let passphrase = generate_passphrase(length, seed);
+            let words : Vec<&str> = passphrase.split(' ').collect();
+
+            prop_assert!(words.len() >1);
+        }
+
+        #[test]
+        fn generate_passphrase_with_wordlist(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
+            let passphrase = generate_passphrase(length, seed);
+            let words = passphrase.split(' ');
+
+            for word in words {
+                prop_assert!(eff_wordlist::large::LIST.iter().any(|(_, rolled_word)| rolled_word.contains(word)), "word {} not in wordlist", word)
+            }
+        }
+
+        #[test]
+        fn generate_passphrase_that_does_not_end_with_separator(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
+            let passphrase = generate_passphrase(length, seed);
+
+            prop_assert!(!passphrase.ends_with(' '));
         }
     }
 
@@ -170,13 +218,22 @@ mod must {
 
     }
 
+    fn generate_passphrase(length: usize, seed: [u8; 32]) -> String {
+        let mut rng: StdRng = SeedableRng::from_seed(seed);
+        let options = GenerationOptions {
+            length,
+            source: Source::Words,
+        };
+        generate(options, &mut rng)
+    }
+
     fn generate_password_from_all_alphabets(length: usize, seed: [u8; 32]) -> String {
         let mut rng: StdRng = SeedableRng::from_seed(seed);
         let options = GenerationOptions {
             length,
             source: Source::Alphabets(Alphabets::all()),
         };
-        generate_password(options, &mut rng)
+        generate(options, &mut rng)
     }
 
     fn test_generated_password_characters(
