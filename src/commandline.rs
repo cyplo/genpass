@@ -45,7 +45,7 @@ pub struct CommandlineOptions {
     #[structopt(
         short = "s",
         long = "include-special",
-        help = "Include at least one special (non-alphanumericc) character",
+        help = "Include at least one special (non-alphanumeric) character",
         conflicts_with = "passphrase"
     )]
     include_special: bool,

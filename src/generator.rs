@@ -117,7 +117,9 @@ mod must {
 
             prop_assert_eq!(password.len(), length)
         }
+    }
 
+    proptest! {
         #[test]
         #[ignore = "This is a long running test, ignored in dev by default, runs on CI"]
         fn generate_good_passwords_by_default(seed in any::<[u8;32]>()) {
@@ -127,7 +129,9 @@ mod must {
             let estimate = zxcvbn(&password, &[]).unwrap();
             prop_assert_eq!(estimate.score, 4);
         }
+    }
 
+    proptest! {
         #[test]
         fn support_lowercase_letters(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
             test_generated_password_characters(

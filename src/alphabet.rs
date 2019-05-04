@@ -47,12 +47,8 @@ mod must {
     fn have_all_different_cases_of_letters() {
         assert!(LOWERCASE_CHARS.eq_ignore_ascii_case(UPPERCASE_CHARS));
         let alphabet = generate_alphabet(Alphabets::all());
-        assert!(alphabet
-            .iter()
-            .any(|character| character.is_ascii_lowercase()));
-        assert!(alphabet
-            .iter()
-            .any(|character| character.is_ascii_uppercase()));
+        assert!(alphabet.iter().any(char::is_ascii_lowercase));
+        assert!(alphabet.iter().any(char::is_ascii_uppercase));
     }
 
     #[test]
@@ -61,7 +57,7 @@ mod must {
         let character_code_range = 0..=255;
         let all_alphanumeric_characters: Vec<char> = character_code_range
             .filter(|code| char::from(*code).is_ascii_alphanumeric())
-            .map(|code| char::from(code))
+            .map(char::from)
             .collect();
         assert!(all_alphanumeric_characters
             .iter()
