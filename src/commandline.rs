@@ -16,6 +16,12 @@ pub struct CommandlineOptions {
     pub length: usize,
 
     #[structopt(
+        long = "passphrase",
+        help = "Create a passphrase of given length instead of a password"
+    )]
+    passphrase: bool,
+
+    #[structopt(
         short = "l",
         long = "include-lowercase",
         help = "Include at least one lowercase letter"
@@ -79,18 +85,13 @@ pub mod test {
 #[cfg(test)]
 mod must {
 
+    use super::test::*;
     use super::*;
 
     #[test]
     fn support_lowercase_letters() {
-        let commandline_options = CommandlineOptions {
-            print_version: false,
-            length: 0,
-            include_lowercase: true,
-            include_uppercase: false,
-            include_digit: false,
-            include_special: false,
-        };
+        let mut commandline_options = default_commandline_options();
+        commandline_options.include_lowercase = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
@@ -99,14 +100,8 @@ mod must {
 
     #[test]
     fn support_uppercase_letters() {
-        let commandline_options = CommandlineOptions {
-            print_version: false,
-            length: 0,
-            include_lowercase: false,
-            include_uppercase: true,
-            include_digit: false,
-            include_special: false,
-        };
+        let mut commandline_options = default_commandline_options();
+        commandline_options.include_uppercase = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
@@ -115,14 +110,8 @@ mod must {
 
     #[test]
     fn support_digits() {
-        let commandline_options = CommandlineOptions {
-            print_version: false,
-            length: 0,
-            include_lowercase: false,
-            include_uppercase: false,
-            include_digit: true,
-            include_special: false,
-        };
+        let mut commandline_options = default_commandline_options();
+        commandline_options.include_digit = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
@@ -131,14 +120,8 @@ mod must {
 
     #[test]
     fn support_special_chars() {
-        let commandline_options = CommandlineOptions {
-            print_version: false,
-            length: 0,
-            include_lowercase: false,
-            include_uppercase: false,
-            include_digit: false,
-            include_special: true,
-        };
+        let mut commandline_options = default_commandline_options();
+        commandline_options.include_special = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
@@ -146,15 +129,8 @@ mod must {
     }
 
     #[test]
-    fn default_to_all_alphabets_when_no_commandline_flags() {
-        let commandline_options = CommandlineOptions {
-            print_version: false,
-            length: 0,
-            include_lowercase: false,
-            include_uppercase: false,
-            include_special: false,
-            include_digit: false,
-        };
+    fn default_to_all_alphabets_whith_default_commandline_flags() {
+        let commandline_options = default_commandline_options();
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
@@ -166,7 +142,7 @@ mod must {
             Source::Alphabets(alphabets) => {
                 assert_eq!(alphabets, expected);
             }
-            Source::Words(_) => assert!(false),
+            Source::Words(_) => panic!("Not an alphabet"),
         }
     }
 }

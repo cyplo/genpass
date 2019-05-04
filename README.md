@@ -35,6 +35,10 @@ OPTIONS:
       --length <length>    The length of the password to generate [default: 32] 
 ```
 
+### A note on passphrases
+* Passphrases are generated using [EFF's](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) "long" password list.
+* Passphrases still abide to the overall length requirements (this may result in the last word of the passphrase being cut to length)
+
 ## A road to 1.0
 
 TODOs to get `genpass` to 1.0
