@@ -40,7 +40,7 @@ $ cargo install genpass
 $ genpass --help
 
 USAGE:
-    genpass [FLAGS] [OPTIONS]
+    genpass [FLAGS] [length]
 
 FLAGS:
     -h, --help                 Prints help information
@@ -51,8 +51,8 @@ FLAGS:
         --passphrase           Create a passphrase of (at least) the given length instead of a password.
         --version
 
-OPTIONS:
-        --length <length>    The length of the password to generate [default: 32]
+ARGS:
+    <length>    The length of the password to generate [default: 32]
 ```
 
 ### A note on passphrases
