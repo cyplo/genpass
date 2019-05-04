@@ -2,6 +2,6 @@
 set -e
 
 cargo fmt -- --check
-cargo clippy
+cargo clippy --all-targets --all-features -- -D warnings
 cargo check
 cargo test -- --ignored
