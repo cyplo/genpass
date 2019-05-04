@@ -55,7 +55,7 @@ fn generate_password_from_alphabet<Rng: rand::Rng>(
     password
 }
 
-fn meets_criteria(alphabets: Alphabets, password_candidate: &String) -> bool {
+fn meets_criteria(alphabets: Alphabets, password_candidate: &str) -> bool {
     let mut meets_criteria = true;
     if alphabets.contains(Alphabets::LOWERCASE) {
         meets_criteria &= password_candidate
@@ -83,6 +83,7 @@ fn meets_criteria(alphabets: Alphabets, password_candidate: &String) -> bool {
 #[cfg(test)]
 mod must {
     use super::*;
+    use crate::commandline::test::default_commandline_options;
     use proptest::prelude::*;
     use proptest::*;
     use zxcvbn::zxcvbn;
@@ -120,9 +121,7 @@ mod must {
         #[test]
         #[ignore = "This is a long running test, ignored in dev by default, runs on CI"]
         fn generate_good_passwords_by_default(seed in any::<[u8;32]>()) {
-            let length = crate::commandline::DEFAULT_LENGTH;
-
-            // TODO: use same generation options as the program defaults to
+            let length = default_commandline_options().length;
             let password = generate_password_from_all_alphabets(length, seed);
 
             let estimate = zxcvbn(&password, &[]).unwrap();

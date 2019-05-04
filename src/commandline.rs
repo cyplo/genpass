@@ -2,8 +2,6 @@ use crate::alphabet::Alphabets;
 use crate::generator::{GenerationOptions, Source};
 use structopt::StructOpt;
 
-pub const DEFAULT_LENGTH: usize = 32;
-
 #[derive(Copy, Clone, StructOpt, Debug)]
 #[structopt(name = "genpass")]
 pub struct CommandlineOptions {
@@ -15,7 +13,7 @@ pub struct CommandlineOptions {
         help = "The length of the password to generate",
         default_value = "32"
     )]
-    length: usize,
+    pub length: usize,
 
     #[structopt(
         short = "l",
@@ -65,6 +63,16 @@ pub fn generation_options_for_commandline_options(
     GenerationOptions {
         length: options.length,
         source: Source::Alphabets(alphabets),
+    }
+}
+
+#[cfg(test)]
+pub mod test {
+    use super::*;
+
+    pub fn default_commandline_options() -> CommandlineOptions {
+        let empty_args: [String; 0] = [];
+        CommandlineOptions::from_iter(&empty_args)
     }
 }
 
