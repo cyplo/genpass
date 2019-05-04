@@ -15,21 +15,24 @@ $ cargo install genpass
 
 ## Usage
 ```
-$ genpass -h
+$ genpass --help
+
+genpass 0.3.0
+A simple yet robust commandline random password generator.
 
 USAGE:
-    genpass [FLAGS] [length]
+  genpass [FLAGS] [OPTIONS]
 
 FLAGS:
-    -h, --help       Prints help information
-    -d               Include at least one digit
-    -l               Include at least one lowercase letter
-    -s               Include at least one (non alphanumeric) special character
-    -u               Include at least one uppercase letter
-    -V, --version    Prints version information
+  -h, --help                 Prints help information
+  -d, --include-digit        Include at least one digit
+  -l, --include-lowercase    Include at least one lowercase letter
+  -s, --include-special      Include at least one special (non-alphanumericc) character
+  -u, --include-uppercase    Include at least one uppercase letter
+      --version
 
-ARGS:
-    <length>     [default: 32]
+OPTIONS:
+      --length <length>    The length of the password to generate [default: 32] 
 ```
 
 ## A road to 1.0

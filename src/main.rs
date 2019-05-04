@@ -1,7 +1,10 @@
 use rand::rngs::OsRng;
 
 mod alphabet;
-mod built_info;
+#[allow(dead_code)]
+mod built_info {
+    include!(concat!(env!("OUT_DIR"), "/built.rs"));
+}
 mod commandline;
 mod generator;
 
@@ -13,7 +16,8 @@ fn main() {
 
     if options.print_version {
         println!(
-            "This is genpass {}{}, built on {} by {}.",
+            "This is {} v{}{}, built on {} by {}.",
+            built_info::PKG_NAME,
             built_info::PKG_VERSION,
             built_info::GIT_VERSION.map_or_else(|| "".to_owned(), |v| format!(" ({})", v)),
             built_info::BUILT_TIME_UTC,
