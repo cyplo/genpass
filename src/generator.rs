@@ -7,7 +7,7 @@ const MINIMUM_PASSWORD_LENGTH: usize = 4;
 #[derive(Copy, Clone)]
 pub enum Source {
     Alphabets(Alphabets),
-    Words(usize)
+    Words(usize),
 }
 
 #[derive(Copy, Clone)]
@@ -30,13 +30,14 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
             }
 
             loop {
-                let password_candidate = generate_password_from_alphabet(options.length, rng, alphabet.as_slice());
+                let password_candidate =
+                    generate_password_from_alphabet(options.length, rng, alphabet.as_slice());
                 if meets_criteria(alphabets, &password_candidate) {
                     return password_candidate;
                 }
             }
         }
-        Source::Words(_) => { "".to_owned() }
+        Source::Words(_) => "".to_owned(),
     }
 }
 
@@ -166,9 +167,12 @@ mod must {
 
     }
 
-    fn generate_password_from_all_alphabets(length: usize, seed: [u8;32]) -> String {
+    fn generate_password_from_all_alphabets(length: usize, seed: [u8; 32]) -> String {
         let mut rng: StdRng = SeedableRng::from_seed(seed);
-        let options = GenerationOptions { length, source: Source::Alphabets(Alphabets::all()) };
+        let options = GenerationOptions {
+            length,
+            source: Source::Alphabets(Alphabets::all()),
+        };
         generate_password(options, &mut rng)
     }
 
@@ -177,9 +181,7 @@ mod must {
         seed: [u8; 32],
         predicate: &Fn(char) -> bool,
     ) -> Result<(), TestCaseError> {
-        let mut rng: StdRng = SeedableRng::from_seed(seed);
-        let options = GenerationOptions { length, source: Source::Alphabets(Alphabets::all()) };
-        let password = generate_password(options, &mut rng);
+        let password = generate_password_from_all_alphabets(length, seed);
 
         prop_assert!(password.chars().any(predicate));
         Ok(())

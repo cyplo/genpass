@@ -94,7 +94,7 @@ fn generation_options_for_commandline_options(options: CommandlineOptions) -> Ge
     }
     GenerationOptions {
         length: options.length,
-        source: Source::Alphabets( alphabets ),
+        source: Source::Alphabets(alphabets),
     }
 }
 
@@ -179,11 +179,11 @@ mod must {
     }
 
     fn assert_is_subalphabet(actual: Source, expected: Alphabets) {
-       match actual {
-           Source::Alphabets(alphabets) => {
-               assert_eq!(alphabets, expected);
-           }
-           Source::Words(_) => { assert!(false) }
-       }
+        match actual {
+            Source::Alphabets(alphabets) => {
+                assert_eq!(alphabets, expected);
+            }
+            Source::Words(_) => assert!(false),
+        }
     }
 }
