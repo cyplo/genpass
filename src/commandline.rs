@@ -17,7 +17,7 @@ pub struct CommandlineOptions {
 
     #[structopt(
         long = "passphrase",
-        help = "Create a passphrase of given length instead of a password"
+        help = "Create a passphrase of (at least) the given length instead of a password."
     )]
     passphrase: bool,
 
