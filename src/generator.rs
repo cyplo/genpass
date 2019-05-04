@@ -5,28 +5,38 @@ use rand;
 const MINIMUM_PASSWORD_LENGTH: usize = 4;
 
 #[derive(Copy, Clone)]
+pub enum Source {
+    Alphabets(Alphabets),
+    Words(usize)
+}
+
+#[derive(Copy, Clone)]
 pub struct GenerationOptions {
     pub length: usize,
-    pub alphabets: Alphabets,
+    pub source: Source,
 }
 
 pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut Rng) -> String {
-    let alphabets = options.alphabets;
-    let length = options.length;
-    let alphabet = generate_alphabet(alphabets);
+    match options.source {
+        Source::Alphabets(alphabets) => {
+            let length = options.length;
+            let alphabet = generate_alphabet(alphabets);
 
-    if length < MINIMUM_PASSWORD_LENGTH {
-        panic!(
-            "Cannot generate password of length {} given the required criteria",
-            length
-        );
-    }
+            if length < MINIMUM_PASSWORD_LENGTH {
+                panic!(
+                    "Cannot generate password of length {} given the required criteria",
+                    length
+                );
+            }
 
-    loop {
-        let password_candidate = generate_password_from_alphabet(options.length, rng, alphabet.as_slice());
-        if meets_criteria(alphabets, &password_candidate) {
-            return password_candidate;
+            loop {
+                let password_candidate = generate_password_from_alphabet(options.length, rng, alphabet.as_slice());
+                if meets_criteria(alphabets, &password_candidate) {
+                    return password_candidate;
+                }
+            }
         }
+        Source::Words(_) => { "".to_owned() }
     }
 }
 
@@ -92,7 +102,7 @@ mod must {
         generate_password(
             GenerationOptions {
                 length: MINIMUM_PASSWORD_LENGTH - 1,
-                alphabets: Alphabets::all(),
+                source: Source::Alphabets(Alphabets::all()),
             },
             &mut rng,
         );
@@ -100,17 +110,29 @@ mod must {
 
     proptest! {
         #[test]
-        fn generate_password_of_given_length(length in TESTABLE_PASSWORD_RANGE) {
-            let mut rng = OsRng::new().unwrap();
-            let password = generate_password(GenerationOptions{ length, alphabets: Alphabets::all()}, &mut rng);
+        fn generate_password_of_given_length(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
+            let password = generate_password_from_all_alphabets(length, seed);
+
             prop_assert_eq!(password.len(), length)
+        }
+
+        #[test]
+        #[ignore = "This is a long running test, ignored in dev by default, runs on CI"]
+        fn generate_good_passwords_by_default(seed in any::<[u8;32]>()) {
+            let length = crate::commandline::DEFAULT_LENGTH;
+
+            // TODO: use same generation options as the program defaults to
+            let password = generate_password_from_all_alphabets(length, seed);
+
+            let estimate = zxcvbn(&password, &[]).unwrap();
+            prop_assert_eq!(estimate.score, 4);
         }
 
         #[test]
         fn support_lowercase_letters(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
             test_generated_password_characters(
+                length,
                 seed,
-                GenerationOptions { length, alphabets: Alphabets::all() },
                 &|character| character.is_ascii_lowercase()
             )?
         }
@@ -118,8 +140,8 @@ mod must {
         #[test]
         fn support_uppercase_letters(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
             test_generated_password_characters(
+                length,
                 seed,
-                GenerationOptions { length, alphabets: Alphabets::all() },
                 &|character| character.is_ascii_uppercase()
             )?
         }
@@ -127,8 +149,8 @@ mod must {
         #[test]
         fn support_digits(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
             test_generated_password_characters(
+                length,
                 seed,
-                GenerationOptions { length, alphabets: Alphabets::all() },
                 &|character| character.is_digit(10)
             )?
         }
@@ -136,33 +158,27 @@ mod must {
         #[test]
         fn support_special_chars(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
             test_generated_password_characters(
+                length,
                 seed,
-                GenerationOptions { length, alphabets: Alphabets::all() },
                 &|character| character.is_alphanumeric()
             )?
         }
 
-        #[test]
-        #[ignore]
-        fn generate_good_passwords_by_default(seed in any::<[u8;32]>()) {
-            let mut rng: StdRng = SeedableRng::from_seed(seed);
-            let length = crate::commandline::DEFAULT_LENGTH;
-            // TODO: use same generation options as the program defaults to
-            let options = GenerationOptions { length, alphabets: Alphabets::all() };
+    }
 
-            let password = generate_password(options, &mut rng);
-            let estimate = zxcvbn(&password, &[]).unwrap();
-
-            prop_assert_eq!(estimate.score, 4);
-        }
+    fn generate_password_from_all_alphabets(length: usize, seed: [u8;32]) -> String {
+        let mut rng: StdRng = SeedableRng::from_seed(seed);
+        let options = GenerationOptions { length, source: Source::Alphabets(Alphabets::all()) };
+        generate_password(options, &mut rng)
     }
 
     fn test_generated_password_characters(
+        length: usize,
         seed: [u8; 32],
-        options: GenerationOptions,
         predicate: &Fn(char) -> bool,
     ) -> Result<(), TestCaseError> {
         let mut rng: StdRng = SeedableRng::from_seed(seed);
+        let options = GenerationOptions { length, source: Source::Alphabets(Alphabets::all()) };
         let password = generate_password(options, &mut rng);
 
         prop_assert!(password.chars().any(predicate));

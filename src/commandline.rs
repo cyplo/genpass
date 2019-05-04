@@ -1,5 +1,5 @@
 use crate::alphabet::Alphabets;
-use crate::generator::GenerationOptions;
+use crate::generator::{GenerationOptions, Source};
 use clap::{App, Arg, ArgMatches};
 
 pub const DEFAULT_LENGTH: usize = 32;
@@ -94,7 +94,7 @@ fn generation_options_for_commandline_options(options: CommandlineOptions) -> Ge
     }
     GenerationOptions {
         length: options.length,
-        alphabets,
+        source: Source::Alphabets( alphabets ),
     }
 }
 
@@ -115,7 +115,7 @@ mod must {
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert_eq!(generation_options.alphabets, Alphabets::LOWERCASE);
+        assert_is_subalphabet(generation_options.source, Alphabets::LOWERCASE);
     }
 
     #[test]
@@ -130,7 +130,7 @@ mod must {
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert_eq!(generation_options.alphabets, Alphabets::UPPERCASE);
+        assert_is_subalphabet(generation_options.source, Alphabets::UPPERCASE);
     }
 
     #[test]
@@ -145,7 +145,7 @@ mod must {
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert_eq!(generation_options.alphabets, Alphabets::DIGIT);
+        assert_is_subalphabet(generation_options.source, Alphabets::DIGIT);
     }
 
     #[test]
@@ -160,7 +160,7 @@ mod must {
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert_eq!(generation_options.alphabets, Alphabets::SPECIAL);
+        assert_is_subalphabet(generation_options.source, Alphabets::SPECIAL);
     }
 
     #[test]
@@ -175,6 +175,15 @@ mod must {
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert!(generation_options.alphabets.is_all());
+        assert_is_subalphabet(generation_options.source, Alphabets::all());
+    }
+
+    fn assert_is_subalphabet(actual: Source, expected: Alphabets) {
+       match actual {
+           Source::Alphabets(alphabets) => {
+               assert_eq!(alphabets, expected);
+           }
+           Source::Words(_) => { assert!(false) }
+       }
     }
 }
