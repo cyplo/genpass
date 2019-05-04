@@ -177,6 +177,16 @@ mod must {
             let estimate = zxcvbn(&password, &[]).unwrap();
             prop_assert_eq!(estimate.score, 4);
         }
+
+        #[test]
+        #[ignore = "This is a long running test, ignored in dev by default, runs on CI"]
+        fn generate_good_passphrases_by_default(seed in any::<[u8;32]>()) {
+            let length = default_commandline_options().length;
+            let passphrase = generate_passphrase(length, seed);
+
+            let estimate = zxcvbn(&passphrase, &[]).unwrap();
+            prop_assert_eq!(estimate.score, 4);
+        }
     }
 
     proptest! {
