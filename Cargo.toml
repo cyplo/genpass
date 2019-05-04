@@ -7,6 +7,7 @@ repository = "https://github.com/cyplo/genpass"
 license = "AGPL-3.0"
 readme = "README.md"
 edition = "2018"
+build = "build.rs"
 
 [badges]
 maintenance = { status = "passively-maintained" }
@@ -17,8 +18,11 @@ travis-ci = { repository = "cyplo/genpass", branch = "master" }
 [dependencies]
 bitflags = "1.0"
 rand = "0.6"
-clap = "2"
+structopt = "0.2"
 
 [dev-dependencies]
 proptest = "0.9"
 zxcvbn = "1.0"
+
+[build-dependencies]
+built = "0.3"

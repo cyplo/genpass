@@ -1,81 +1,51 @@
 use crate::alphabet::Alphabets;
 use crate::generator::{GenerationOptions, Source};
-use clap::{App, Arg, ArgMatches};
+use structopt::StructOpt;
 
 pub const DEFAULT_LENGTH: usize = 32;
-const LENGTH_OPTION_NAME: &str = "length";
-const INCLUDE_LOWERCASE_OPTION_NAME: &str = "include-lowercase";
-const INCLUDE_UPPERCASE_OPTION_NAME: &str = "include-uppercase";
-const INCLUDE_DIGIT_OPTION_NAME: &str = "include-digit";
-const INCLUDE_SPECIAL_OPTION_NAME: &str = "include-special";
 
-pub fn get_generation_options() -> GenerationOptions {
-    let default_length_text = DEFAULT_LENGTH.to_string();
-    let matches = App::new("genpass")
-        .arg(
-            Arg::with_name(LENGTH_OPTION_NAME)
-                .short("l")
-                .index(1)
-                .default_value(&default_length_text),
-        )
-        .arg(
-            Arg::with_name(INCLUDE_LOWERCASE_OPTION_NAME)
-                .short("l")
-                .help("Include at least one lowercase letter")
-                .takes_value(false),
-        )
-        .arg(
-            Arg::with_name(INCLUDE_UPPERCASE_OPTION_NAME)
-                .short("u")
-                .help("Include at least one uppercase letter")
-                .takes_value(false),
-        )
-        .arg(
-            Arg::with_name(INCLUDE_DIGIT_OPTION_NAME)
-                .short("d")
-                .help("Include at least one digit")
-                .takes_value(false),
-        )
-        .arg(
-            Arg::with_name(INCLUDE_SPECIAL_OPTION_NAME)
-                .short("s")
-                .help("Include at least one (non alphanumeric) special character")
-                .takes_value(false),
-        )
-        .get_matches();
-    let commandline_options = commandline_options_for_matches(&matches);
-    generation_options_for_commandline_options(commandline_options)
-}
+#[derive(Copy, Clone, StructOpt, Debug)]
+#[structopt(name = "genpass")]
+pub struct CommandlineOptions {
+    #[structopt(long = "version")]
+    pub print_version: bool,
 
-#[derive(Copy, Clone)]
-struct CommandlineOptions {
+    #[structopt(
+        long = "length",
+        help = "The length of the password to generate",
+        default_value = "32"
+    )]
     length: usize,
+
+    #[structopt(
+        short = "l",
+        long = "include-lowercase",
+        help = "Include at least one lowercase letter"
+    )]
     include_lowercase: bool,
+    #[structopt(
+        short = "u",
+        long = "include-uppercase",
+        help = "Include at least one uppercase letter"
+    )]
     include_uppercase: bool,
+    #[structopt(
+        short = "d",
+        long = "include-digit",
+        help = "Include at least one digit"
+    )]
     include_digit: bool,
+    #[structopt(
+        short = "s",
+        long = "include-special",
+        help = "Include at least one special (non-alphanumericc) character"
+    )]
     include_special: bool,
 }
 
-fn commandline_options_for_matches(matches: &ArgMatches) -> CommandlineOptions {
-    let length = matches
-        .value_of(LENGTH_OPTION_NAME)
-        .unwrap()
-        .parse::<usize>()
-        .unwrap();
-    let include_lowercase = matches.is_present(INCLUDE_LOWERCASE_OPTION_NAME);
-    let include_uppercase = matches.is_present(INCLUDE_UPPERCASE_OPTION_NAME);
-    let include_digit = matches.is_present(INCLUDE_DIGIT_OPTION_NAME);
-    let include_special = matches.is_present(INCLUDE_SPECIAL_OPTION_NAME);
-    CommandlineOptions {
-        length,
-        include_lowercase,
-        include_uppercase,
-        include_digit,
-        include_special,
-    }
-}
-
-fn generation_options_for_commandline_options(options: CommandlineOptions) -> GenerationOptions {
+pub fn generation_options_for_commandline_options(
+    options: CommandlineOptions,
+) -> GenerationOptions {
     let mut alphabets = Alphabets::empty();
     if options.include_lowercase {
         alphabets |= Alphabets::LOWERCASE;
@@ -106,6 +76,7 @@ mod must {
     #[test]
     fn support_lowercase_letters() {
         let commandline_options = CommandlineOptions {
+            print_version: false,
             length: 0,
             include_lowercase: true,
             include_uppercase: false,
@@ -121,6 +92,7 @@ mod must {
     #[test]
     fn support_uppercase_letters() {
         let commandline_options = CommandlineOptions {
+            print_version: false,
             length: 0,
             include_lowercase: false,
             include_uppercase: true,
@@ -136,6 +108,7 @@ mod must {
     #[test]
     fn support_digits() {
         let commandline_options = CommandlineOptions {
+            print_version: false,
             length: 0,
             include_lowercase: false,
             include_uppercase: false,
@@ -151,6 +124,7 @@ mod must {
     #[test]
     fn support_special_chars() {
         let commandline_options = CommandlineOptions {
+            print_version: false,
             length: 0,
             include_lowercase: false,
             include_uppercase: false,
@@ -166,6 +140,7 @@ mod must {
     #[test]
     fn default_to_all_alphabets_when_no_commandline_flags() {
         let commandline_options = CommandlineOptions {
+            print_version: false,
             length: 0,
             include_lowercase: false,
             include_uppercase: false,

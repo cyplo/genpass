@@ -5,6 +5,7 @@ rustup install nightly
 
 (test -x "${HOME}/.cargo/bin/cargo-release" || cargo install cargo-release)
 (test -x "${HOME}/.cargo/bin/cargo-install-update" || cargo install cargo-update)
+(test -x "${HOME}/.cargo/bin/cargo-pants" || cargo install cargo-pants)
 
 set +e
 cargo install-update -a
