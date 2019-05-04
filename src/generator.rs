@@ -4,13 +4,13 @@ use rand;
 
 const MINIMUM_PASSWORD_LENGTH: usize = 4;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Source {
     Alphabets(Alphabets),
-    Words(usize),
+    Words,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct GenerationOptions {
     pub length: usize,
     pub source: Source,
@@ -37,7 +37,7 @@ pub fn generate_password<Rng: rand::Rng>(options: GenerationOptions, rng: &mut R
                 }
             }
         }
-        Source::Words(_) => "".to_owned(),
+        Source::Words => "".to_owned(),
     }
 }
 

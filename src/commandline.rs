@@ -24,25 +24,29 @@ pub struct CommandlineOptions {
     #[structopt(
         short = "l",
         long = "include-lowercase",
-        help = "Include at least one lowercase letter"
+        help = "Include at least one lowercase letter",
+        conflicts_with = "passphrase"
     )]
     include_lowercase: bool,
     #[structopt(
         short = "u",
         long = "include-uppercase",
-        help = "Include at least one uppercase letter"
+        help = "Include at least one uppercase letter",
+        conflicts_with = "passphrase"
     )]
     include_uppercase: bool,
     #[structopt(
         short = "d",
         long = "include-digit",
-        help = "Include at least one digit"
+        help = "Include at least one digit",
+        conflicts_with = "passphrase"
     )]
     include_digit: bool,
     #[structopt(
         short = "s",
         long = "include-special",
-        help = "Include at least one special (non-alphanumericc) character"
+        help = "Include at least one special (non-alphanumericc) character",
+        conflicts_with = "passphrase"
     )]
     include_special: bool,
 }
@@ -50,25 +54,30 @@ pub struct CommandlineOptions {
 pub fn generation_options_for_commandline_options(
     options: CommandlineOptions,
 ) -> GenerationOptions {
-    let mut alphabets = Alphabets::empty();
-    if options.include_lowercase {
-        alphabets |= Alphabets::LOWERCASE;
-    }
-    if options.include_uppercase {
-        alphabets |= Alphabets::UPPERCASE;
-    }
-    if options.include_digit {
-        alphabets |= Alphabets::DIGIT;
-    }
-    if options.include_special {
-        alphabets |= Alphabets::SPECIAL;
-    }
-    if alphabets.is_empty() {
-        alphabets = Alphabets::all();
-    }
+    let source = if options.passphrase {
+        Source::Words
+    } else {
+        let mut alphabets = Alphabets::empty();
+        if options.include_lowercase {
+            alphabets |= Alphabets::LOWERCASE;
+        }
+        if options.include_uppercase {
+            alphabets |= Alphabets::UPPERCASE;
+        }
+        if options.include_digit {
+            alphabets |= Alphabets::DIGIT;
+        }
+        if options.include_special {
+            alphabets |= Alphabets::SPECIAL;
+        }
+        if alphabets.is_empty() {
+            alphabets = Alphabets::all();
+        }
+        Source::Alphabets(alphabets)
+    };
     GenerationOptions {
         length: options.length,
-        source: Source::Alphabets(alphabets),
+        source,
     }
 }
 
@@ -87,6 +96,7 @@ mod must {
 
     use super::test::*;
     use super::*;
+    use crate::generator::Source::Words;
 
     #[test]
     fn support_lowercase_letters() {
@@ -129,7 +139,17 @@ mod must {
     }
 
     #[test]
-    fn default_to_all_alphabets_whith_default_commandline_flags() {
+    fn support_passphrases() {
+        let mut commandline_options = default_commandline_options();
+        commandline_options.passphrase = true;
+
+        let generation_options = generation_options_for_commandline_options(commandline_options);
+
+        assert_eq!(generation_options.source, Words);
+    }
+
+    #[test]
+    fn default_to_all_alphabets_with_default_commandline_flags() {
         let commandline_options = default_commandline_options();
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
@@ -142,7 +162,7 @@ mod must {
             Source::Alphabets(alphabets) => {
                 assert_eq!(alphabets, expected);
             }
-            Source::Words(_) => panic!("Not an alphabet"),
+            Source::Words => panic!("Not an alphabet"),
         }
     }
 }
