@@ -16,8 +16,8 @@ is-it-maintained-open-issues = { repository = "cyplo/genpass" }
 travis-ci = { repository = "cyplo/genpass", branch = "master" }
 
 [dependencies]
-bitflags = "1.0"
-rand = "0.6"
+bitflags = "1.1"
+rand = "0.7"
 structopt = "0.2"
 eff-wordlist = "1.0"
 

@@ -111,13 +111,12 @@ mod must {
     #[test]
     #[should_panic]
     fn refuse_to_generate_too_short_of_a_password() {
-        let mut rng = OsRng::new().unwrap();
         generate(
             GenerationOptions {
                 length: MINIMUM_PASSWORD_LENGTH - 1,
                 source: Source::Alphabets(Alphabets::all()),
             },
-            &mut rng,
+            &mut OsRng,
         );
     }
 
@@ -250,7 +249,7 @@ mod must {
     fn test_generated_password_characters(
         length: usize,
         seed: [u8; 32],
-        predicate: &Fn(char) -> bool,
+        predicate: &dyn Fn(char) -> bool,
     ) -> Result<(), TestCaseError> {
         let password = generate_password_from_all_alphabets(length, seed);
 

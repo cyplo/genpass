@@ -26,7 +26,6 @@ fn main() {
         return;
     }
 
-    let mut rng = OsRng::new().expect("Error opening OS random number generator");
     let generation_options = commandline::generation_options_for_commandline_options(options);
-    println!("{}", generate(generation_options, &mut rng));
+    println!("{}", generate(generation_options, &mut OsRng));
 }
