@@ -85,5 +85,4 @@ mod must {
             .iter()
             .all(|character| !character.is_alphanumeric()));
     }
-
 }
