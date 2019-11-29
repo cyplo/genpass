@@ -175,7 +175,7 @@ mod must {
             let password = generate_password_from_all_alphabets(length, seed);
 
             let estimate = zxcvbn(&password, &[]).unwrap();
-            prop_assert_eq!(estimate.score, 4);
+            prop_assert_eq!(estimate.score(), 4);
         }
 
         #[test]
@@ -185,7 +185,7 @@ mod must {
             let passphrase = generate_passphrase(length, seed);
 
             let estimate = zxcvbn(&passphrase, &[]).unwrap();
-            prop_assert_eq!(estimate.score, 4);
+            prop_assert_eq!(estimate.score(), 4);
         }
     }
 
