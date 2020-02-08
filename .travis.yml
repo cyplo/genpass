@@ -1,21 +1,18 @@
-sudo: required
-language: rust
-rust:
-- stable
+if: (type IN (push, cron) AND branch = master) OR (type = pull_request)
+language: nix
 
 script:
 - set -e
-- "./scripts/install.sh"
-- "./scripts/test.sh"
-- "./scripts/package.sh"
+- nix-shell --pure --run "./scripts/test.sh"
+- nix-shell --pure --run "./scripts/package.sh"
 
-cache: cargo
+cache:
+  directories:
+    - $HOME/.cargo
 
 before_deploy:
-- git checkout $TRAVIS_BRANCH
-- git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
-- cargo login $CRATES_TOKEN
-- cargo release --no-dev-version --no-confirm --tag-prefix v patch
+- set -e
+- nix-shell --run "./scripts/prepare_release.sh"
 
 deploy:
 - provider: releases
