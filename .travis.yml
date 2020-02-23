@@ -12,7 +12,7 @@ cache:
 
 before_deploy:
 - set -e
-- nix-shell --run "./scripts/prepare_release.sh"
+- nix-shell --run "./scripts/release.sh"
 
 deploy:
 - provider: releases
@@ -27,11 +27,6 @@ deploy:
     condition: "! (`git log -n 1 --pretty='%an'` =~ 'Travis')"
 
   skip_cleanup: true
-
-addons:
-  apt:
-    packages:
-      - libssl-dev
 
 env:
   global:
