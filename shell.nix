@@ -1,12 +1,12 @@
 let
-  pkgs = import <nixpkgs> {};
-  unstableTarball = fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
-  unstable = import unstableTarball {};
+  moz_overlay = import (builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz);
+  nixpkgs = import <nixpkgs> { overlays = [ moz_overlay ]; };
+  channel = (nixpkgs.rustChannelOf { rustToolchain = ./rust-toolchain; });
 in
-  pkgs.mkShell {
-    buildInputs = with pkgs; [
-      rustc rustfmt cargo cargo-watch unstable.cargo-release rustPackages.clippy
-      git direnv
-      zlib
+  with nixpkgs;
+  stdenv.mkDerivation {
+    name = "genpass_shell";
+    buildInputs = [
+      channel.rust cargo-release
     ];
   }
