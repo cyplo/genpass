@@ -21,7 +21,7 @@ deploy:
     on:
       repo: cyplo/genpass
       branch: master
-      condition: "(-z $TRAVIS_TAG) AND (! (`git log -n 1 --pretty='%an'` =~ 'Travis'))"
+      condition: "(-z $TRAVIS_TAG) && (! (`git log -n 1 --pretty='%an'` =~ 'Travis'))"
 
     skip_cleanup: true
 
