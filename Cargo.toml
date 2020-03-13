@@ -1,6 +1,6 @@
 [package]
 name = "genpass"
-version = "0.3.6"
+version = "0.4.0"
 authors = ["Cyryl Płotnicki <cyplo@cyplo.net>"]
 description = "A simple yet robust commandline random password generator."
 repository = "https://github.com/cyplo/genpass"
@@ -30,6 +30,6 @@ version = "1"
 default-features = false
 features = ["run-for-all", "prepush-hook", "run-cargo-test", "run-cargo-clippy", "run-cargo-fmt"]
 
-[build-dependencies]
-built = "0.3"
-
+[build-dependencies.built]
+version = "0.4"
+features = ["git2", "chrono"]
