@@ -1,4 +1,5 @@
 language: nix
+nix: 2.3.3
 
 script:
   - set -e
