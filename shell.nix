@@ -8,5 +8,6 @@ in
     name = "genpass_shell";
     buildInputs = [
       channel.rust cargo-release
+      cacert openssl zlib
     ];
   }
