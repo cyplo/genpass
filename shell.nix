@@ -7,7 +7,7 @@ in
   stdenv.mkDerivation {
     name = "genpass_shell";
     buildInputs = [
-      channel.rust cargo-release
+      channel.rust
       cacert openssl zlib
     ];
   }
