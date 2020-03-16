@@ -12,7 +12,7 @@ cache:
 
 before_deploy:
   - set -e
-  - nix-shell --run "./scripts/prepare_release.sh"
+  - nix-shell --run "./scripts/release.sh"
 
 deploy:
   - provider: releases
