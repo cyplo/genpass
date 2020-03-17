@@ -8,6 +8,6 @@ in
     name = "genpass_shell";
     buildInputs = [
       channel.rust
-      cacert openssl zlib
+      cacert openssl openssh zlib
     ];
   }
