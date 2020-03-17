@@ -9,5 +9,6 @@ in
     buildInputs = [
       channel.rust
       cacert openssl openssh zlib
+      gcc pkgconfig clang
     ];
   }
