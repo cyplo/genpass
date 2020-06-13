@@ -1,0 +1,8 @@
+test1:
+  stage: test
+  tags:
+    -nix
+  script:
+    - nix-shell --pure --run "./scripts/test.sh"
+    - nix-shell --pure --run "./scripts/package.sh"
+
