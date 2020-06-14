@@ -1,8 +1,6 @@
 use crate::alphabet::generate_alphabet;
 use crate::alphabet::Alphabets;
 
-use rand;
-
 const MINIMUM_PASSWORD_LENGTH: usize = 4;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
