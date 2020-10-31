@@ -8,13 +8,6 @@ secrets:
     - 996295b0-681c-49e8-8774-1be2f3e0bfe9
 
 tasks:
-    - github_push: |
-        set +xv
-        cd genpass
-        GITHUB_TOKEN=`cat ~/.github_token`
-        git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/genpass.git
-        git push github --all --force
-
     - test: |
         cd genpass
         nix-shell --pure --run "./scripts/test.sh"
@@ -25,3 +18,9 @@ tasks:
         cd genpass
         nix-shell --pure --run "./scripts/release.sh"
 
+    - github_push: |
+        set +xv
+        cd genpass
+        GITHUB_TOKEN=`cat ~/.github_token`
+        git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/genpass.git
+        git push github --all --force
