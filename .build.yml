@@ -8,7 +8,7 @@ secrets:
   - 996295b0-681c-49e8-8774-1be2f3e0bfe9
 
 environment:
-  - CI: "true"
+  CI: "true"
 
 tasks:
   - test: |
