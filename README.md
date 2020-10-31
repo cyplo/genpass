@@ -1,4 +1,4 @@
-# genpass [![Build Status](https://travis-ci.org/cyplo/genpass.svg?branch=master)](https://travis-ci.org/cyplo/genpass) [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/cyplo/donate)
+# genpass [![Build Status](https://travis-ci.org/cyplo/genpass.svg?branch=master)](https://travis-ci.org/cyplo/genpass) [![dependency status](https://deps.rs/repo/github/cyplo/genpass/status.svg)](https://deps.rs/repo/github/cyplo/genpass) [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/cyplo/donate)
 
 A simple yet robust commandline random password generator.
 
@@ -17,7 +17,7 @@ genpass --passphrase 128 # generate longer passphrase
 genpass -dlu             # no special characters
 ```
 
-### Generating a password directly into your system cliboard
+### Generating a password directly into your system clipboard
 
 On a Mac:
 ```
@@ -40,19 +40,19 @@ $ cargo install genpass
 $ genpass --help
 
 USAGE:
-    genpass [FLAGS] [length]
+genpass [FLAGS] [length]
 
 FLAGS:
-    -h, --help                 Prints help information
-    -d, --include-digit        Include at least one digit
-    -l, --include-lowercase    Include at least one lowercase letter
-    -s, --include-special      Include at least one special (non-alphanumeric) character
-    -u, --include-uppercase    Include at least one uppercase letter
-        --passphrase           Create a passphrase of (at least) the given length instead of a password.
-        --version
+-h, --help                 Prints help information
+-d, --include-digit        Include at least one digit
+-l, --include-lowercase    Include at least one lowercase letter
+-s, --include-special      Include at least one special (non-alphanumeric) character
+-u, --include-uppercase    Include at least one uppercase letter
+--passphrase           Create a passphrase of (at least) the given length instead of a password.
+--version
 
 ARGS:
-    <length>    The length of the password to generate [default: 32]
+<length>    The length of the password to generate [default: 32]
 ```
 
 ### A note on passphrases
