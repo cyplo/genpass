@@ -21,5 +21,6 @@ tasks:
 
     - publish_crate: |
         set +xv
+        cd genpass
         nix-shell --pure --run "./scripts/release.sh"
 
