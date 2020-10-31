@@ -1,10 +1,11 @@
 image: nixos/latest
 sources:
-    - https://git.sr.ht/~cyplo/genpass
+    - git@git.sr.ht:~cyplo/genpass
 
 secrets:
     - b7161fff-05f4-4470-b4a1-57bd67dede23
     - f7642e3d-3fa5-48da-affa-be2fa24da689
+    - 996295b0-681c-49e8-8774-1be2f3e0bfe9
 
 tasks:
     - github_push: |

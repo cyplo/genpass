@@ -3,4 +3,4 @@ set -e
 
 cargo install cargo-release -f
 export PATH="$PATH:$HOME/.cargo/bin"
-cargo login $CRATES_TOKEN
+cargo release --no-dev-version --no-confirm patch --dry-run
