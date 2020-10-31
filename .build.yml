@@ -1,26 +1,29 @@
 image: nixos/latest
 sources:
-    - git@git.sr.ht:~cyplo/genpass
+  - git@git.sr.ht:~cyplo/genpass
 
 secrets:
-    - b7161fff-05f4-4470-b4a1-57bd67dede23
-    - f7642e3d-3fa5-48da-affa-be2fa24da689
-    - 996295b0-681c-49e8-8774-1be2f3e0bfe9
+  - b7161fff-05f4-4470-b4a1-57bd67dede23
+  - f7642e3d-3fa5-48da-affa-be2fa24da689
+  - 996295b0-681c-49e8-8774-1be2f3e0bfe9
+
+environment:
+  - CI: "true"
 
 tasks:
-    - test: |
-        cd genpass
-        nix-shell --pure --run "./scripts/test.sh"
-        nix-shell --pure --run "./scripts/package.sh"
+  - test: |
+      cd genpass
+      nix-shell --pure --run "./scripts/test.sh"
+      nix-shell --pure --run "./scripts/package.sh"
 
-    - publish_crate: |
-        set +xv
-        cd genpass
-        nix-shell --pure --run "./scripts/release.sh"
+  - publish_crate: |
+      set +xv
+      cd genpass
+      nix-shell --pure --run "./scripts/release.sh"
 
-    - github_push: |
-        set +xv
-        cd genpass
-        GITHUB_TOKEN=`cat ~/.github_token`
-        git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/genpass.git
-        git push github --all --force
+  - github_push: |
+      set +xv
+      cd genpass
+      GITHUB_TOKEN=`cat ~/.github_token`
+      git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/genpass.git
+      nix-shell --pure --run 'git push github --all --force'
