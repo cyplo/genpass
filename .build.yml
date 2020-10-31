@@ -4,6 +4,7 @@ sources:
 
 secrets:
     - b7161fff-05f4-4470-b4a1-57bd67dede23
+    - f7642e3d-3fa5-48da-affa-be2fa24da689
 
 tasks:
     - github_push: |
@@ -17,3 +18,8 @@ tasks:
         cd genpass
         nix-shell --pure --run "./scripts/test.sh"
         nix-shell --pure --run "./scripts/package.sh"
+
+    - publish_crate: |
+        set +xv
+        nix-shell --pure --run "./scripts/release.sh"
+
