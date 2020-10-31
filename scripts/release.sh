@@ -3,4 +3,4 @@ set -e
 
 cargo install cargo-release -f
 export PATH="$PATH:$HOME/.cargo/bin"
-cargo release --no-dev-version --no-confirm patch --dry-run
+cargo release --no-dev-version --no-confirm patch
