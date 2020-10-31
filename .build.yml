@@ -1,0 +1,19 @@
+image: nixos/latest
+sources:
+    - https://git.sr.ht/~cyplo/genpass
+
+secrets:
+    - b7161fff-05f4-4470-b4a1-57bd67dede23
+
+tasks:
+    - github_push: |
+        set +xv
+        cd genpass
+        GITHUB_TOKEN=`cat ~/.github_token`
+        git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/genpass.git
+        git push github --all --force
+
+    - test: |
+        cd genpass
+        nix-shell --pure --run "./scripts/test.sh"
+        nix-shell --pure --run "./scripts/package.sh"
