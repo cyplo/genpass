@@ -9,6 +9,6 @@ in
     buildInputs = [
       channel.rust
       cacert openssl openssh zlib
-      llvm pkgconfig
+      llvm pkgconfig git
     ];
   }
