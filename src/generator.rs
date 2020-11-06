@@ -89,7 +89,6 @@ fn meets_criteria(alphabets: Alphabets, password_candidate: &str) -> bool {
 }
 
 #[cfg(test)]
-#[allow(clippy::unnecessary_operation)] // clippy does not like proptest-generated code
 mod must {
     use super::*;
     use crate::commandline::test::default_commandline_options;
