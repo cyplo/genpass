@@ -11,9 +11,6 @@ build = "build.rs"
 
 [badges]
 maintenance = { status = "passively-maintained" }
-is-it-maintained-issue-resolution = { repository = "cyplo/genpass" }
-is-it-maintained-open-issues = { repository = "cyplo/genpass" }
-travis-ci = { repository = "cyplo/genpass", branch = "master" }
 
 [dependencies]
 bitflags = "1.2"
@@ -23,7 +20,9 @@ eff-wordlist = "1.0"
 
 [dev-dependencies]
 proptest = "0.10"
-zxcvbn = "2.0"
+zxcvbn = "2"
+assert_cmd = "1"
+predicates = "1"
 
 [dev-dependencies.cargo-husky]
 version = "1"
