@@ -14,12 +14,12 @@ maintenance = { status = "passively-maintained" }
 
 [dependencies]
 bitflags = "1.2"
-rand = "0.7"
+rand = "0.8"
 structopt = "0.3"
 eff-wordlist = "1.0"
 
 [dev-dependencies]
-proptest = "0.10"
+proptest = "1"
 zxcvbn = "2"
 assert_cmd = "1"
 predicates = "1"
