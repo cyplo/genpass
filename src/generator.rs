@@ -141,9 +141,8 @@ mod must {
             prop_assume!(length > longest_word.len() + 1);
 
             let passphrase = generate_passphrase(length, seed);
-            let words : Vec<&str> = passphrase.split(' ').collect();
-
-            prop_assert!(words.len() >1);
+            let words = passphrase.split(' ');
+            prop_assert!(words.count() >1);
         }
 
         #[test]
