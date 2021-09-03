@@ -59,7 +59,7 @@
             };
 
             buildInputs = with pkgs; [ openssl.dev cacert openssh zlib ];
-            nativeBuildInputs = with pkgs; [ rustc cargo pkgconfig ];
+            nativeBuildInputs = with pkgs; [ rustc cargo pkgconfig git ];
   in
   rec {
     packages.${name} = project.rootCrate.build;
