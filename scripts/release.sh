@@ -12,4 +12,4 @@ ssh-keyscan git.sr.ht >> ~/.ssh/known_hosts
 git config user.email "releases@cyplo.dev"
 git config user.name "Release Bot"
 git checkout master
-cargo release --no-dev-version --no-confirm patch
+cargo release --no-dev-version --no-confirm --execute patch

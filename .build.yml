@@ -11,6 +11,9 @@ environment:
   CI: "true"
 
 tasks:
+  - fetch: |
+      cd genpass
+      nix-shell --pure --run "ls"
   - test: |
       cd genpass
       nix-shell --pure --run "./scripts/test.sh"
