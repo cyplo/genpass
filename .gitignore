@@ -3,3 +3,4 @@ target/
 **/*.rs.bk
 .gdb_history
 cobertura.xml
+.direnv/

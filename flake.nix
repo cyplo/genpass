@@ -83,6 +83,7 @@
               nixpkgs-fmt
               cargo-watch
               cargo-edit
+              cargo-outdated
               pkgs.rust-bin.${rustChannel}.latest.rust-analysis
               pkgs.rust-bin.${rustChannel}.latest.rls
             ]);
