@@ -75,7 +75,7 @@ fn meets_criteria(alphabets: Alphabets, password_candidate: &str) -> bool {
             .chars()
             .any(|character| character.is_ascii_uppercase());
     }
-    if alphabets.contains(Alphabets::DIGIT) {
+    if alphabets.contains(Alphabets::NUMERIC) {
         meets_criteria &= password_candidate
             .chars()
             .any(|character| character.is_digit(10));
@@ -205,7 +205,7 @@ mod must {
         }
 
         #[test]
-        fn support_digits(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
+        fn support_numeric(length in TESTABLE_PASSWORD_RANGE, seed in any::<[u8;32]>()) {
             test_generated_password_characters(
                 length,
                 seed,

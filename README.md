@@ -40,19 +40,19 @@ $ cargo install genpass
 $ genpass --help
 
 USAGE:
-genpass [FLAGS] [length]
+    genpass [FLAGS] [length]
 
 FLAGS:
--h, --help                 Prints help information
--d, --include-digit        Include at least one digit
--l, --include-lowercase    Include at least one lowercase letter
--s, --include-special      Include at least one special (non-alphanumeric) character
--u, --include-uppercase    Include at least one uppercase letter
---passphrase           Create a passphrase of (at least) the given length instead of a password.
---version
+    -h, --help                 Prints help information
+    -l, --include-lowercase    Generate the password using lowercase letters
+    -n, --include-numeric      Generate the password using numeric characters
+    -s, --include-special      Generate the password using special (non-alphanumeric) characters
+    -u, --include-uppercase    Generate the password using uppercase letters
+        --passphrase           Create a passphrase of (at least) the given length instead of a password.
+        --version              
 
 ARGS:
-<length>    The length of the password to generate [default: 32]
+    <length>    The length of the password to generate [default: 32]
 ```
 
 ### A note on passphrases
