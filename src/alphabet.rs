@@ -4,7 +4,7 @@ bitflags! {
     pub struct Alphabets:u8 {
         const LOWERCASE = 0b0001;
         const UPPERCASE = 0b0010;
-        const DIGIT     = 0b0100;
+        const NUMERIC     = 0b0100;
         const SPECIAL   = 0b1000;
     }
 }
@@ -17,7 +17,7 @@ impl Default for Alphabets {
 
 const LOWERCASE_CHARS: &str = "abcdefghijklmnopqrstuvwxyz";
 const UPPERCASE_CHARS: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const DIGITS_CHARS: &str = "1234567890";
+const NUMERIC_CHARS: &str = "1234567890";
 const SPECIAL_CHARS: &str = "~!@#$%^&*()-=_+{}[]|\';/.,?><";
 
 pub fn generate_alphabet(subalphabets: Alphabets) -> Vec<char> {
@@ -28,8 +28,8 @@ pub fn generate_alphabet(subalphabets: Alphabets) -> Vec<char> {
     if subalphabets.contains(Alphabets::LOWERCASE) {
         resulting_alphabet.extend(LOWERCASE_CHARS.chars());
     }
-    if subalphabets.contains(Alphabets::DIGIT) {
-        resulting_alphabet.extend(DIGITS_CHARS.chars());
+    if subalphabets.contains(Alphabets::NUMERIC) {
+        resulting_alphabet.extend(NUMERIC_CHARS.chars());
     }
     if subalphabets.contains(Alphabets::SPECIAL) {
         resulting_alphabet.extend(SPECIAL_CHARS.chars());

@@ -25,28 +25,28 @@ pub struct CommandlineOptions {
     #[structopt(
         short = "l",
         long = "include-lowercase",
-        help = "Include at least one lowercase letter",
+        help = "Generate the password using lowercase letters",
         conflicts_with = "passphrase"
     )]
     include_lowercase: bool,
     #[structopt(
         short = "u",
         long = "include-uppercase",
-        help = "Include at least one uppercase letter",
+        help = "Generate the password using uppercase letters",
         conflicts_with = "passphrase"
     )]
     include_uppercase: bool,
     #[structopt(
-        short = "d",
-        long = "include-digit",
-        help = "Include at least one digit",
+        short = "n",
+        long = "include-numeric",
+        help = "Generate the password using numeric characters",
         conflicts_with = "passphrase"
     )]
-    include_digit: bool,
+    include_numeric: bool,
     #[structopt(
         short = "s",
         long = "include-special",
-        help = "Include at least one special (non-alphanumeric) character",
+        help = "Generate the password using special (non-alphanumeric) characters",
         conflicts_with = "passphrase"
     )]
     include_special: bool,
@@ -65,8 +65,8 @@ pub fn generation_options_for_commandline_options(
         if options.include_uppercase {
             alphabets |= Alphabets::UPPERCASE;
         }
-        if options.include_digit {
-            alphabets |= Alphabets::DIGIT;
+        if options.include_numeric {
+            alphabets |= Alphabets::NUMERIC;
         }
         if options.include_special {
             alphabets |= Alphabets::SPECIAL;
@@ -120,13 +120,13 @@ mod must {
     }
 
     #[test]
-    fn support_digits() {
+    fn support_numeric() {
         let mut commandline_options = default_commandline_options();
-        commandline_options.include_digit = true;
+        commandline_options.include_numeric = true;
 
         let generation_options = generation_options_for_commandline_options(commandline_options);
 
-        assert_is_subalphabet(generation_options.source, Alphabets::DIGIT);
+        assert_is_subalphabet(generation_options.source, Alphabets::NUMERIC);
     }
 
     #[test]
