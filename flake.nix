@@ -36,9 +36,10 @@
             cargo-edit
             cargo-outdated
             cargo-watch
+            clippy
+            git
             llvmPackages_13.llvm
             nixpkgs-fmt
-            clippy
             rustc
             rustfmt
           ];
