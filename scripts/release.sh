@@ -6,10 +6,10 @@ if [ $(git tag --points-at HEAD | wc -m) -ne 0 ]; then
     exit 0
 fi
 
-cargo install cargo-release -f
 export PATH="$PATH:$HOME/.cargo/bin"
 ssh-keyscan git.sr.ht >> ~/.ssh/known_hosts
 git config user.email "releases@cyplo.dev"
 git config user.name "Release Bot"
+git config init.defaultBranch main
 git checkout main
 cargo release --no-dev-version --no-confirm --execute patch

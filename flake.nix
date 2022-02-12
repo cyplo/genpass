@@ -35,13 +35,14 @@
             cargo
             cargo-edit
             cargo-outdated
+            cargo-release
             cargo-watch
             clippy
             git
             llvmPackages_13.llvm
             nixpkgs-fmt
-            openssl
             openssh
+            openssl
             pkg-config
             rustc
             rustfmt
