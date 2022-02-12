@@ -12,4 +12,6 @@ git config user.email "releases@cyplo.dev"
 git config user.name "Release Bot"
 git config init.defaultBranch main
 git checkout main
-cargo release --no-dev-version --no-confirm --execute patch
+git remote add origin git@git.sr.ht:~cyplo/genpass
+cargo release --no-dev-version --no-confirm --no-push --execute patch
+git push origin main

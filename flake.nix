@@ -36,6 +36,7 @@
             cargo-edit
             cargo-outdated
             cargo-release
+            cargo-tarpaulin
             cargo-watch
             clippy
             git

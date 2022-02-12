@@ -1,5 +1,4 @@
 allow-branch = ["main"]
-push-remote = "git@git.sr.ht:~cyplo/genpass"
 
 pre-release-replacements = [
   {file = "CHANGELOG.md", search = "Unreleased", replace = "{{version}}"},
