@@ -11,5 +11,5 @@ export PATH="$PATH:$HOME/.cargo/bin"
 ssh-keyscan git.sr.ht >> ~/.ssh/known_hosts
 git config user.email "releases@cyplo.dev"
 git config user.name "Release Bot"
-git checkout master
+git checkout main
 cargo release --no-dev-version --no-confirm --execute patch
