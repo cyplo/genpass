@@ -40,6 +40,8 @@
             git
             llvmPackages_13.llvm
             nixpkgs-fmt
+            openssl
+            pkg-config
             rustc
             rustfmt
           ];
