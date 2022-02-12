@@ -3,9 +3,13 @@
   inputs = {
     utils.url = "github:numtide/flake-utils";
     naersk.url = "github:nix-community/naersk";
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, utils, naersk }:
+  outputs = { self, nixpkgs, utils, naersk, flake-compat }:
     utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages."${system}";
