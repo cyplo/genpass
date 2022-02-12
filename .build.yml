@@ -6,6 +6,7 @@ secrets:
   - 6c23a8c1-7a30-4a7e-b3b7-0171e898a7d3
   - f7642e3d-3fa5-48da-affa-be2fa24da689
   - 996295b0-681c-49e8-8774-1be2f3e0bfe9
+  - 376ee22c-23f8-4395-acb7-5b933833df4d
 
 environment:
   CI: "true"
@@ -18,6 +19,12 @@ tasks:
       cd genpass
       nix-shell --pure --run "./scripts/test.sh"
       nix-shell --pure --run "./scripts/package.sh"
+
+  - code_coverage: |
+      set +xv
+      cd genpass
+      CODECOV_TOKEN=`cat ~/.codecov_token_genpass`
+      nix-shell --pure --run "./scripts/coverage.sh"
 
   - publish_crate: |
       set +xv
