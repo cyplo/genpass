@@ -41,6 +41,7 @@
             llvmPackages_13.llvm
             nixpkgs-fmt
             openssl
+            openssh
             pkg-config
             rustc
             rustfmt
