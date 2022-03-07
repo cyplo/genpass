@@ -32,3 +32,4 @@ tasks:
       GITHUB_TOKEN=`cat ~/.github_token`
       git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/genpass.git
       nix-shell --pure --run 'git push github --all --force'
+      nix-shell --pure --run 'git push github --tags'
