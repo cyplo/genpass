@@ -14,5 +14,5 @@ git config init.defaultBranch main
 git checkout main
 git remote set-url origin git@git.sr.ht:~cyplo/genpass
 cargo release --no-dev-version --no-confirm --no-push --no-publish --execute patch
-git push origin main
+git push origin --all
 cargo publish
