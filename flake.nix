@@ -32,6 +32,7 @@
         # `nix develop`
         devShell = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
+            cacert
             cargo
             cargo-edit
             cargo-outdated
