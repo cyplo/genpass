@@ -1,0 +1,20 @@
+pipeline:
+
+  check:
+    image: nixpkgs/nix-flakes:latest
+    pull: true
+    commands:
+      - nix-shell --pure --run "./scripts/test.sh"
+      - nix-shell --pure --run "./scripts/package.sh"
+
+  publish:
+    image: nixpkgs/nix-flakes:latest
+    pull: true
+    commands:
+      - nix-shell --pure --run "./scripts/release.sh"
+
+  publish:
+    image: nixpkgs/nix-flakes:latest
+    pull: true
+    commands:
+      - ls
