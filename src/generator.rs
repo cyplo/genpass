@@ -209,7 +209,7 @@ mod must {
             test_generated_password_characters(
                 length,
                 seed,
-                &|character| character.is_digit(10)
+                &|character| character.is_ascii_digit()
             )?
         }
 
