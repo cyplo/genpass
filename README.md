@@ -69,3 +69,7 @@ TODOs to get `genpass` to 1.0
 ## Contributing
 All contributions welcome !
 Ideally - start a discussion with an issue first before contributing a PR.
+
+## Sources
+
+`git clone https://git.cyplo.dev/cyplo/genpass.git`

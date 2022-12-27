@@ -7,12 +7,13 @@ if [ $(git tag --points-at HEAD | wc -m) -ne 0 ]; then
 fi
 
 export PATH="$PATH:$HOME/.cargo/bin"
-ssh-keyscan git.sr.ht >> ~/.ssh/known_hosts
+mkdir -p ~/.ssh
+ssh-keyscan git.cyplo.dev >> ~/.ssh/known_hosts
 git config user.email "releases@cyplo.dev"
 git config user.name "Release Bot"
 git config init.defaultBranch main
 git checkout main
-git remote set-url origin git@git.sr.ht:~cyplo/genpass
+git remote set-url origin gitea@git.cyplo.dev:cyplo/genpass.git
 cargo release --no-dev-version --no-confirm --no-push --no-publish --execute patch
 git push origin --all
 git push origin --tags
