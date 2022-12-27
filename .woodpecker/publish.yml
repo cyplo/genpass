@@ -3,7 +3,9 @@ pipeline:
     image: nixpkgs/nix-flakes:latest
     pull: true
     commands:
-      - nix build
+      - mkdir -p ~/.config/nix
+      - echo "sandbox = false" >> ~/.config/nix/nix.conf 
+      - nix build 
       - nix flake check
       - nix shell -c ./scripts/package.sh
       - nix shell -c ./scripts/release.sh
