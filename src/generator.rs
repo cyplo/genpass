@@ -3,7 +3,7 @@ use crate::alphabet::Alphabets;
 
 const MINIMUM_PASSWORD_LENGTH: usize = 4;
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Source {
     Alphabets(Alphabets),
     Words,
@@ -78,7 +78,7 @@ fn meets_criteria(alphabets: Alphabets, password_candidate: &str) -> bool {
     if alphabets.contains(Alphabets::NUMERIC) {
         meets_criteria &= password_candidate
             .chars()
-            .any(|character| character.is_digit(10));
+            .any(|character| character.is_ascii_digit());
     }
     if alphabets.contains(Alphabets::SPECIAL) {
         meets_criteria &= password_candidate
