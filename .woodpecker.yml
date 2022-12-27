@@ -1,5 +1,4 @@
 pipeline:
-
   check:
     image: nixpkgs/nix-flakes:latest
     pull: true
