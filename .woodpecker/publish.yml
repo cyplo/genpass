@@ -6,4 +6,4 @@ pipeline:
       - nix-shell --pure --run "./scripts/test.sh"
       - nix-shell --pure --run "./scripts/package.sh"
       - nix-shell --pure --run "./scripts/release.sh"
-
+    secrets: [ cargo_registry_token ]

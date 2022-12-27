@@ -9,6 +9,7 @@ fi
 export PATH="$PATH:$HOME/.cargo/bin"
 mkdir -p ~/.ssh
 ssh-keyscan git.cyplo.dev >> ~/.ssh/known_hosts
+
 git config user.email "releases@cyplo.dev"
 git config user.name "Release Bot"
 git config init.defaultBranch main
