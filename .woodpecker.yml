@@ -12,7 +12,7 @@ pipeline:
     commands:
       - nix-shell --pure --run "./scripts/release.sh"
 
-  publish:
+  github_push:
     image: nixpkgs/nix-flakes:latest
     pull: true
     commands:
