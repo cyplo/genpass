@@ -1,5 +1,5 @@
 pipeline:
-  check:
+  check_and_publish:
     image: nixpkgs/nix-flakes:latest
     pull: true
     commands:
@@ -7,8 +7,3 @@ pipeline:
       - nix-shell --pure --run "./scripts/package.sh"
       - nix-shell --pure --run "./scripts/release.sh"
 
-  github_push:
-    image: nixpkgs/nix-flakes:latest
-    pull: true
-    commands:
-      - ls
