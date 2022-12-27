@@ -4,6 +4,6 @@ pipeline:
     pull: true
     commands:
       - nix develop --no-sandbox -c git fetch --unshallow origin
-      - nix develop --no-sandbox -c git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/dotfiles.git
+      - nix develop --no-sandbox -c git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/genpass.git
       - nix develop --no-sandbox -c git push github --all --force
     secrets: [ github_token ]
