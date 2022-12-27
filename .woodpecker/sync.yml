@@ -3,7 +3,6 @@ pipeline:
     image: nixpkgs/nix-flakes:latest
     pull: true
     commands:
-      - nix develop --no-sandbox -c git lfs fetch --all
       - nix develop --no-sandbox -c git fetch --unshallow origin
       - nix develop --no-sandbox -c git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/dotfiles.git
       - nix develop --no-sandbox -c git push github --all --force
