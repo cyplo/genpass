@@ -9,8 +9,11 @@ pipeline:
       - export AWS_ACCESS_KEY_ID="nix-builder"
       - export AWS_SECRET_ACCESS_KEY="$MINIO_NIX_BUILDER_KEY"
       - nix build 
+      - nix copy --all --to 's3://nix-store?endpoint=objects.cyplo.dev&scheme=https&region=cyplodev'
       - nix flake check
+      - nix copy --all --to 's3://nix-store?endpoint=objects.cyplo.dev&scheme=https&region=cyplodev'
       - nix develop -c ./scripts/package.sh
+      - nix copy --all --to 's3://nix-store?endpoint=objects.cyplo.dev&scheme=https&region=cyplodev'
       - nix develop -c ./scripts/release.sh
       - nix copy --all --to 's3://nix-store?endpoint=objects.cyplo.dev&scheme=https&region=cyplodev'
     
