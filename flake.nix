@@ -43,15 +43,11 @@
           # Additional darwin specific inputs can be set here
           pkgs.libiconv
         ];
-
-      # Build *just* the cargo dependencies, so we can reuse
       # all of that work (e.g. via cachix) when running in CI
       cargoArtifacts = craneLib.buildDepsOnly {
         inherit src buildInputs;
       };
 
-      # Build the actual crate itself, reusing the dependency
-      # artifacts from above.
       my-crate = craneLib.buildPackage {
         inherit cargoArtifacts src buildInputs;
       };
@@ -97,7 +93,6 @@
 
       devShells.default = pkgs.mkShell {
         inputsFrom = builtins.attrValues self.checks;
-
         # Extra inputs can be added here
         nativeBuildInputs = with pkgs; [
           cacert

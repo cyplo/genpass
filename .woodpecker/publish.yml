@@ -7,6 +7,6 @@ pipeline:
       - echo "sandbox = false" >> ~/.config/nix/nix.conf 
       - nix build 
       - nix flake check
-      - nix shell -c ./scripts/package.sh
-      - nix shell -c ./scripts/release.sh
+      - nix develop -c ./scripts/package.sh
+      - nix develop -c ./scripts/release.sh
     secrets: [ cargo_registry_token ]
