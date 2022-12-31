@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+echo "starting to publish"
 
 export PATH="$PATH:$HOME/.cargo/bin"
 mkdir -p ~/.ssh
@@ -12,10 +13,15 @@ git config init.defaultBranch main
 git checkout main
 git remote set-url origin gitea@git.cyplo.dev:cyplo/genpass.git
 git pull origin main --tags
+
+echo "tags"
+git tag --points-at HEAD
+
 if [ $(git tag --points-at HEAD | wc -m) -ne 0 ]; then
     echo "skipping publish as already on a tag"
     exit 0
 fi
+
 cargo release --no-confirm --no-push --no-publish --execute patch
 git push origin --all
 git push origin --tags
