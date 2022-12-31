@@ -1,4 +1,4 @@
-# genpass [![status-badge](https://ci.cyplo.dev/api/badges/cyplo/genpass/status.svg)](https://ci.cyplo.dev/cyplo/genpass) [![builds.sr.ht status](https://builds.sr.ht/~cyplo/genpass.svg)](https://builds.sr.ht/~cyplo/genpass?) [![dependency status](https://deps.rs/repo/github/cyplo/genpass/status.svg)](https://deps.rs/repo/github/cyplo/genpass) [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/cyplo/donate)
+# genpass [![status-badge](https://ci.cyplo.dev/api/badges/cyplo/genpass/status.svg)](https://ci.cyplo.dev/cyplo/genpass) [![dependency status](https://deps.rs/repo/github/cyplo/genpass/status.svg)](https://deps.rs/repo/github/cyplo/genpass) [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/cyplo/donate)
 
 A simple yet robust commandline random password generator.
 
