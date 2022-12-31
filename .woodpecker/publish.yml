@@ -35,4 +35,4 @@ pipeline:
       - echo "$STORE_SECRET_KEY" > ~/.store-secret-key
       - nix store sign --key-file ~/.store-secret-key --all
       - nix copy --all --substitute-on-destination --to 's3://nix-store?endpoint=objects.cyplo.dev&scheme=https&region=cyplodev'
-    secrets: [ cargo_registry_token , minio_nix_builder_key , ssh_private_key , ssh_public_key ]
+    secrets: [ cargo_registry_token , minio_nix_builder_key , ssh_private_key , ssh_public_key , store_secret_key ]
