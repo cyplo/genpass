@@ -4,3 +4,6 @@ target/
 .gdb_history
 cobertura.xml
 .direnv/
+result
+result/
+
