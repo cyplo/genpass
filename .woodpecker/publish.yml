@@ -30,6 +30,7 @@ pipeline:
       - mkdir -p ~/.ssh/
       - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
       - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_ed25519.pub
+      - chmod 0400 ~/.ssh/id_ed25519
       - nix develop -c ./scripts/release.sh
       - echo "$STORE_SECRET_KEY" > ~/.store-secret-key
       - nix store sign --key-file ~/.store-secret-key --all
