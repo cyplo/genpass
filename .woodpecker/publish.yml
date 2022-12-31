@@ -12,6 +12,7 @@ pipeline:
       - nix flake check
       - nix develop -c ./scripts/package.sh
       - nix copy --all --substitute-on-destination --to 's3://nix-store?endpoint=objects.cyplo.dev&scheme=https&region=cyplodev'
+    secrets: [ cargo_registry_token , minio_nix_builder_key ]
 
   publish:
     image: nixpkgs/nix-flakes:latest
