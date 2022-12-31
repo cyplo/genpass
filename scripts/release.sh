@@ -11,8 +11,7 @@ git config user.name "Release Bot"
 git config init.defaultBranch main
 git checkout main
 git remote set-url origin gitea@git.cyplo.dev:cyplo/genpass.git
-git pull origin main
-git pull origin --tags
+git pull origin main --tags
 if [ $(git tag --points-at HEAD | wc -m) -ne 0 ]; then
     echo "skipping publish as already on a tag"
     exit 0
