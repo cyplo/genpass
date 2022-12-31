@@ -28,9 +28,14 @@ On Linux:
 genpass | xclip -selection clipboard
 ```
 
+## Getting genpass
 
-## Installation
-On a system with [Rust](https://www.rust-lang.org/en-US/) installed:
+### If you're using Nix flakes
+* you can try genpass without installing it `nix run git+https://git.cyplo.dev/cyplo/genpass.git`
+* flake url is `https://git.cyplo.dev/cyplo/genpass.git`
+
+### On any system with Rust installed
+
 ```
 $ cargo install genpass
 ```
@@ -40,19 +45,19 @@ $ cargo install genpass
 $ genpass --help
 
 USAGE:
-    genpass [FLAGS] [length]
+genpass [FLAGS] [length]
 
 FLAGS:
-    -h, --help                 Prints help information
-    -l, --include-lowercase    Generate the password using lowercase letters
-    -n, --include-numeric      Generate the password using numeric characters
-    -s, --include-special      Generate the password using special (non-alphanumeric) characters
-    -u, --include-uppercase    Generate the password using uppercase letters
-        --passphrase           Create a passphrase of (at least) the given length instead of a password.
-        --version              
+-h, --help                 Prints help information
+-l, --include-lowercase    Generate the password using lowercase letters
+-n, --include-numeric      Generate the password using numeric characters
+-s, --include-special      Generate the password using special (non-alphanumeric) characters
+-u, --include-uppercase    Generate the password using uppercase letters
+--passphrase           Create a passphrase of (at least) the given length instead of a password.
+--version
 
 ARGS:
-    <length>    The length of the password to generate [default: 32]
+<length>    The length of the password to generate [default: 32]
 ```
 
 ### A note on passphrases
@@ -68,8 +73,13 @@ TODOs to get `genpass` to 1.0
 
 ## Contributing
 All contributions welcome !
-Ideally - start a discussion with an issue first before contributing a PR.
 
-## Sources
+### Sources
 
 `git clone https://git.cyplo.dev/cyplo/genpass.git`
+
+### quickstart
+
+* you can use [Nix](https://nixos.org/download.html) to recreate the development environment reproducibly
+* `nix develop` in this repo will give you a shell with all the dependencies needed
+
