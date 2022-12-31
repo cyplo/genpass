@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -e
 
-cargo doc
-cargo package
+cargo doc --color never
+cargo package --color never

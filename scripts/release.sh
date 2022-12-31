@@ -20,4 +20,4 @@ fi
 cargo release --no-confirm --no-push --no-publish --execute patch
 git push origin --all
 git push origin --tags
-cargo publish
+cargo publish --color never
