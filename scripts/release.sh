@@ -15,7 +15,7 @@ git config user.name "Release Bot"
 git config init.defaultBranch main
 git checkout main
 git remote set-url origin gitea@git.cyplo.dev:cyplo/genpass.git
-cargo release --no-dev-version --no-confirm --no-push --no-publish --execute patch
+cargo release --no-confirm --no-push --no-publish --execute patch
 git push origin --all
 git push origin --tags
 cargo publish
