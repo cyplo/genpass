@@ -19,6 +19,8 @@ pipeline:
       - echo "trusted-public-keys = cyplodev-store-key:a/+PEufePs7giWqYyRqy+TgUKLMbY+RQuJQu2aUjdl8= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" >> ~/.config/nix/nix.conf
       - echo "$STORE_SECRET_KEY" > ~/.store-secret-key
       - nix store sign --key-file ~/.store-secret-key --all
+      - nix flake check
+      - nix develop -c ./scripts/package.sh
       - nix develop -c ./scripts/release.sh
       - nix copy --all --substitute-on-destination --to "ssh://nix-ssh@bolty.raptor-carp.ts.net"
     secrets: [ cargo_registry_token , ssh_private_key , ssh_public_key , store_secret_key , tailscale_key ]
