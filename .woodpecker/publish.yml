@@ -17,9 +17,6 @@ pipeline:
       - ssh-keyscan bolty.raptor-carp.ts.net >> ~/.ssh/known_hosts
       - echo "substituters = ssh://nix-ssh@bolty.raptor-carp.ts.net https://cache.nixos.org/" >> ~/.config/nix/nix.conf
       - echo "trusted-public-keys = cyplodev-store-key:a/+PEufePs7giWqYyRqy+TgUKLMbY+RQuJQu2aUjdl8= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" >> ~/.config/nix/nix.conf
-      - export ALL_PROXY=socks5://localhost:1055/
-      - export HTTP_PROXY=http://localhost:1055/
-      - export http_proxy=http://localhost:1055
       - echo "$STORE_SECRET_KEY" > ~/.store-secret-key
       - nix store sign --key-file ~/.store-secret-key --all
       - nix develop -c ./scripts/release.sh
