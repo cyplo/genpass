@@ -30,4 +30,8 @@ git push origin --tags
 export CARGO_NET_RETRY=16
 export CARGO_HTTP_MULTIPLEXING=false
 
+export ALL_PROXY=socks5://localhost:1055/
+export HTTP_PROXY=http://localhost:1055/
+export http_proxy=http://localhost:1055
+
 cargo publish --color never -q
