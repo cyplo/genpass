@@ -14,7 +14,10 @@ pipeline:
       - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
       - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_ed25519.pub
       - chmod 0400 ~/.ssh/id_ed25519
-      - echo "nameserver 1.1.1.1" > /etc/resolv.conf
+      - nix shell nixpkgs#tailscale -c tailscaled --tun=userspace-networking --socks5-server=localhost:1055 --outbound-http-proxy-listen=localhost:1055 --state="mem:" &
+      - sleep 1
+      - nix shell nixpkgs#tailscale -c tailscale up -authkey $TAILSCALE_KEY
+      - nix shell nixpkgs#tailscale -c tailscale status
       - nix develop -c ./scripts/release.sh
       - echo "$STORE_SECRET_KEY" > ~/.store-secret-key
       - nix store sign --key-file ~/.store-secret-key --all
