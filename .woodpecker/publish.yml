@@ -18,6 +18,9 @@ pipeline:
       - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
       - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_ed25519.pub
       - chmod 0400 ~/.ssh/id_ed25519
+      - export ALL_PROXY=socks5://localhost:1055/
+      - export HTTP_PROXY=http://localhost:1055/
+      - export http_proxy=http://localhost:1055
       - nix develop -c ./scripts/release.sh
       - echo "$STORE_SECRET_KEY" > ~/.store-secret-key
       - nix store sign --key-file ~/.store-secret-key --all
