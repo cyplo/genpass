@@ -14,6 +14,7 @@ pipeline:
       - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
       - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_ed25519.pub
       - chmod 0400 ~/.ssh/id_ed25519
+      - ssh-keyscan bolty.raptor-carp.ts.net >> ~/.ssh/known_hosts
       - echo "substituters = ssh://nix-ssh@bolty.raptor-carp.ts.net https://cache.nixos.org/" >> ~/.config/nix/nix.conf
       - echo "trusted-public-keys = cyplodev-store-key:a/+PEufePs7giWqYyRqy+TgUKLMbY+RQuJQu2aUjdl8= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" >> ~/.config/nix/nix.conf
       - export AWS_ACCESS_KEY_ID="nix-builder"
@@ -23,5 +24,5 @@ pipeline:
       - export http_proxy=http://localhost:1055
       - echo "$STORE_SECRET_KEY" > ~/.store-secret-key
       - nix store sign --key-file ~/.store-secret-key --all
-      - nix copy --all --substitute-on-destination --to "nix-ssh@bolty.raptor-carp.ts.net"
+      - nix copy --all --substitute-on-destination --to "ssh://nix-ssh@bolty.raptor-carp.ts.net"
     secrets: [ cargo_registry_token , minio_nix_builder_key , ssh_private_key , ssh_public_key , store_secret_key , tailscale_key ]
