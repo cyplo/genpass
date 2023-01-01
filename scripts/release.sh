@@ -10,8 +10,9 @@ ssh-keyscan git.cyplo.dev >> ~/.ssh/known_hosts
 git config user.email "release-bot@cyplo.dev"
 git config user.name "Release Bot"
 git config init.defaultBranch main
-git checkout main
 git remote set-url origin gitea@git.cyplo.dev:cyplo/genpass.git
+git fetch
+git checkout main
 git pull origin main --tags
 
 echo "tags"
