@@ -18,7 +18,6 @@ pipeline:
       - nix shell nixpkgs#tailscale -c tailscaled --tun=userspace-networking --socks5-server=localhost:1055 --outbound-http-proxy-listen=localhost:1055 --state="mem:" &
       - sleep 1
       - nix shell nixpkgs#tailscale -c tailscale up -authkey $TAILSCALE_KEY
-      - nix shell nixpkgs#tailscale -c tailscale status
       - nix develop -c ./scripts/release.sh
       - echo "$STORE_SECRET_KEY" > ~/.store-secret-key
       - nix store sign --key-file ~/.store-secret-key --all

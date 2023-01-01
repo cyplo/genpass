@@ -15,9 +15,6 @@ git fetch
 git checkout main
 git pull origin main --tags
 
-echo "tags"
-git tag --points-at HEAD
-
 if [ $(git tag --points-at HEAD | wc -m) -ne 0 ]; then
     echo "skipping publish as already on a tag"
     exit 0
@@ -34,4 +31,4 @@ export ALL_PROXY=socks5://localhost:1055/
 export HTTP_PROXY=http://localhost:1055/
 export http_proxy=http://localhost:1055
 
-cargo publish --color never -q
+cargo publish --color never
