@@ -3,7 +3,7 @@ pipeline:
     image: plugins/git
     pull: true
     commands:
-      - git fetch --unshallow origin
+      - git fetch --unshallow origin || true
       - git remote add github https://cyplo:$GITHUB_TOKEN@github.com/cyplo/genpass.git
       - git push github --all --force
     secrets: [ github_token ]
