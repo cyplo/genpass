@@ -13,5 +13,5 @@ pipeline:
       - nix copy --all --substitute-on-destination --to "ssh://nix-ssh@bolty.raptor-carp.ts.net"
       - nix develop -c ./scripts/release.sh
       - nix store sign --key-file ~/.store-secret-key --all
-      - nix copy --all --substitute-on-destination --to "ssh://nix-ssh@bolty.raptor-carp.ts.net"
+      - nix copy --all --substitute-on-destination --to "ssh://nix-ssh@bolty.raptor-carp.ts.net" || true
     secrets: [ cargo_registry_token , ssh_private_key , ssh_public_key , store_secret_key , tailscale_key ]
